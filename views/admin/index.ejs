@@ -1,0 +1,43 @@
+<%- include('../includes/header'); %>
+    <div class="jumbotron">
+        <h2>IP 地址管理</h2>
+        <p>管理 IP 地址界面，可以增加并删除 IP 地址</p>
+
+        <form action="/admin/ban" method="POST" class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="">IP地址:</label>
+                <input type="text" class="form-control" id="ip" name="ip" placeholder="IP">
+            </div>
+            <button type="submit" class="btn btn-primary">禁止此 IP</button>
+        </form>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">禁止IP列表 <%- actions.currentlyBanned; %>/<%- actions.totalBanned; %>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>IP</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i=0;i < actions.bannedIPList.length;i++){ %>
+                    <tr>
+                        <th scope="row">
+                            <%- i+1; %>
+                        </th>
+                        <td>
+                            <%- actions.bannedIPList[i]; %>
+                        </td>
+                        <td>
+                            <a class="btn btn-xs btn-danger"
+                                href="/admin/unban?ip=<%- actions.bannedIPList[i]; %>">删除</a>
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
+    <%- include('../includes/footer'); %>
