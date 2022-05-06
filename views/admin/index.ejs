@@ -1,18 +1,18 @@
 <%- include('../includes/header'); %>
     <div class="jumbotron">
         <h2>IP 地址管理</h2>
-        <p>管理 IP 地址界面，可以增加并删除 IP 地址</p>
-
+        <p>IP 地址管理，可以增加禁止的 IP 地址或者删除误操作</p>
         <form action="/admin/ban" method="POST" class="form-inline" role="form">
             <div class="form-group">
                 <label class="sr-only" for="">IP地址:</label>
                 <input type="text" class="form-control" id="ip" name="ip" placeholder="IP">
             </div>
-            <button type="submit" class="btn btn-primary">禁止此 IP</button>
+            <button type="submit" class="btn btn-danger" id="banBtn"><i class="fa fa-ban" aria-hidden="true"></i> 禁止</button>
         </form>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">禁止IP列表 <%- actions.currentlyBanned; %>/<%- actions.totalBanned; %>
+        <div class="panel-heading">
+            目前禁止【<%- actions.currentlyBanned; %>】次 / 总共禁止【<%- actions.totalBanned; %>】次
         </div>
         <table class="table">
             <thead>
@@ -33,7 +33,7 @@
                         </td>
                         <td>
                             <a class="btn btn-xs btn-danger"
-                                href="/admin/unban?ip=<%- actions.bannedIPList[i]; %>">删除</a>
+                                href="/admin/unban?ip=<%- actions.bannedIPList[i]; %>"><i class="fa fa-trash" aria-hidden="true"></i> 删除</a>
                         </td>
                     </tr>
                     <% } %>

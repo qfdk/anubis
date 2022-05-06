@@ -2,7 +2,19 @@
   "name": "anubis",
   "version": "0.0.0",
   "private": true,
+  "bin": "./bin/www",
+  "pkg": {
+    "targets": [
+      "node16-linux",
+      "node16-macos"
+    ],
+    "assets": [
+      "public/**/*",
+      "views/**/*"
+    ]
+  },
   "scripts": {
+    "build": "pkg . --out-path=dist",
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
@@ -16,6 +28,7 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "pkg": "^5.6.0"
   }
 }
