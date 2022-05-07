@@ -21,7 +21,7 @@
                     <th style="min-width: 23px;">#</th>
                     <th style="min-width: 125px;">IP</th>
                     <th style="min-width: 44px;">国家</th>
-                    <th >城市</th>
+                    <!-- <th >城市</th> -->
                     <th>操作</th>
                 </tr>
             </thead>
@@ -37,9 +37,9 @@
                         <td>
                             <%- info[i].country; %>
                         </td>
-                        <td>
+                        <!-- <td>
                             <%- info[i].city; %>
-                        </td>
+                        </td> -->
                         <td>
                             <a class="btn btn-xs btn-danger"
                                 href="/admin/jails/<%=jailname;%>/unban?ip=<%- info[i].ip; %>"><i class="fa fa-trash"
