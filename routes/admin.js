@@ -31,7 +31,7 @@ router.get('/jails/:jailname', async (req, res, next) => {
             };
         }
     }
-    res.render('admin/jasil', { jailname: req.params.jailname, ...status });
+    res.render('admin/jail', { jailname: req.params.jailname, ...status });
 });
 
 router.get('/jails/:jailname/unban', async (req, res, next) => {
