@@ -1,39 +1,32 @@
 <%- include('../includes/header'); %>
     <div class="jumbotron">
-        <h2>IP 地址管理</h2>
-        <p>IP 地址管理，可以增加禁止的 IP 地址或者删除误操作</p>
-        <form action="/admin/ban" method="POST" class="form-inline" role="form">
-            <div class="form-group">
-                <label class="sr-only" for="">IP地址:</label>
-                <input type="text" class="form-control" id="ip" name="ip" placeholder="IP">
-            </div>
-            <button type="submit" class="btn btn-danger" id="banBtn"><i class="fa fa-ban" aria-hidden="true"></i> 禁止</button>
-        </form>
+        <h2>监狱列表</h2>
+        <p>当前监狱个数【<%- jails; %>】</p>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            目前禁止【<%- actions.currentlyBanned; %>】次 / 总共禁止【<%- actions.totalBanned; %>】次
+            监狱列表
         </div>
         <table class="table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>IP</th>
+                    <th>监狱名称</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
-                <% for(let i=0;i < actions.bannedIPList.length;i++){ %>
+                <% for(let i=0;i < list.length;i++){ %>
                     <tr>
                         <th scope="row">
                             <%- i+1; %>
                         </th>
                         <td>
-                            <%- actions.bannedIPList[i]; %>
+                            <%- list[i]; %>
                         </td>
                         <td>
-                            <a class="btn btn-xs btn-danger"
-                                href="/admin/unban?ip=<%- actions.bannedIPList[i]; %>"><i class="fa fa-trash" aria-hidden="true"></i> 删除</a>
+                            <a class="btn btn-xs btn-info" href="/admin/jails/<%- list[i]; %>"><i
+                                    class="fa fa-search" aria-hidden="true"></i> 查看</a>
                         </td>
                     </tr>
                     <% } %>

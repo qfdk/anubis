@@ -605,6 +605,11 @@ express@~4.16.1:
   dependencies:
     unpickle "git+https://github.com/drudrum/node-unpickle.git"
 
+fast-geoip@^1.1.70:
+  version "1.1.70"
+  resolved "https://registry.yarnpkg.com/fast-geoip/-/fast-geoip-1.1.70.tgz#a354be08ac89262a3f71a0ebaa7da4ae9bd9d1c7"
+  integrity sha512-UUEBtXMv0NiZ4NtzlEyCseayw76r8IYIm77lzrmLJf8rQ3wew5JjQrUnOQUbplf4bPcBd1kHS28JkbsFYXYrTA==
+
 fast-glob@^3.2.9:
   version "3.2.11"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.11.tgz#a1172ad95ceb8a16e20caa5c5e56480e5129c1d9"

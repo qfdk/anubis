@@ -24,6 +24,7 @@
     "express": "~4.16.1",
     "express-session": "^1.17.2",
     "fail2ban": "git+https://github.com/drudrum/fail2ban.git",
+    "fast-geoip": "^1.1.70",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1"
   },

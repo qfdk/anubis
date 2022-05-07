@@ -1,0 +1,53 @@
+<%- include('../includes/header'); %>
+    <div class="jumbotron">
+        <h2>IP 地址管理</h2>
+        <p>IP 地址管理，可以增加禁止的 IP 地址或者删除误操作</p>
+        <form action="/admin/jails/<%=jailname;%>/ban" method="POST" class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="">IP地址:</label>
+                <input type="text" class="form-control" id="ip" name="ip" placeholder="IP">
+            </div>
+            <button type="submit" class="btn btn-danger" id="banBtn"><i class="fa fa-ban" aria-hidden="true"></i>
+                禁止</button>
+        </form>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            目前禁止【<%- actions.currentlyBanned; %>】次 / 总共禁止【<%- actions.totalBanned; %>】次
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>IP</th>
+                    <th>国家</th>
+                    <th>城市</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i=0;i < info.length;i++){ %>
+                    <tr>
+                        <th scope="row">
+                            <%- i+1; %>
+                        </th>
+                        <td>
+                            <%- info[i].ip; %>
+                        </td>
+                        <td>
+                            <%- info[i].country; %>
+                        </td>
+                        <td>
+                            <%- info[i].city; %>
+                        </td>
+                        <td>
+                            <a class="btn btn-xs btn-danger"
+                                href="/admin/jails/<%=jailname;%>/unban?ip=<%- info[i].ip; %>"><i class="fa fa-trash"
+                                    aria-hidden="true"></i> 删除</a>
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
+    <%- include('../includes/footer'); %>
