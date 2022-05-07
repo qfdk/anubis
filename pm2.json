@@ -1,0 +1,22 @@
+{
+  "name": "anubis",
+  "script": "bin/www",
+  "cwd": "./",
+  "exec_mode": "fork",
+  "max_memory_restart": "512M",
+  "autorestart": true,
+  "node_args": [],
+  "args": [],
+  "env": {
+    "NODE_ENV": "production",
+    "LOG_LEVEL": "info",
+    "PORT": 1233,
+    "TZ": "Europe/Paris",
+    "username": "admin",
+    "password": "admin"
+  },
+  "log_date_format": "YYYY-MM-DD HH:mm:ss.SSS",
+  "error": "./logs/app-err.log",
+  "output": "./logs/app-out.log",
+  "merge_logs": true
+}
