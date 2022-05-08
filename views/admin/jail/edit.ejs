@@ -1,0 +1,29 @@
+<%- include('../../includes/header'); %>
+    <div class="jumbotron">
+        <h2>编辑【<%=jailname;%>】规则</h2>
+        <p>编辑规则并重新载入配置</p>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">新规则设置</div>
+        <div class="panel-body">
+            <form action="/admin/jails/<%=jailname;%>/doEdit" method="POST" class="form-horizontal" enctype="application/json">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">配置文件位置：</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="configFileName" value="<%=configFileName;%>"
+                            readonly>
+                    </div>
+                </div>
+                <h4 class="text-center">规则设置：</h4>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <textarea class="form-control" rows="6" name="content"><%=content;%></textarea>
+                    </div>
+                </div>
+                <div class="form-group" style="text-align:center">
+                    <input type="submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+    <%- include('../../includes/footer'); %>

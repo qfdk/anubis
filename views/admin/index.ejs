@@ -1,17 +1,18 @@
 <%- include('../includes/header'); %>
     <div class="jumbotron">
-        <h2>监狱列表</h2>
-        <p>当前监狱个数【<%- jails; %>】</p>
+        <h2>规则列表</h2>
+        <p>当前规则个数【<%- jails; %>】</p>
+        <a class="btn btn-primary" href="/admin/jail/add"><i class="fa fa-plus-square" aria-hidden="true"></i> 添加新规则</a>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            监狱列表
+            规则列表
         </div>
         <table class="table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>监狱名称</th>
+                    <th>规则名称</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -25,8 +26,10 @@
                             <%- list[i]; %>
                         </td>
                         <td>
-                            <a class="btn btn-xs btn-info" href="/admin/jails/<%- list[i]; %>"><i
-                                    class="fa fa-search" aria-hidden="true"></i> 查看</a>
+                            <a class="btn btn-xs btn-info" href="/admin/jails/<%- list[i]; %>"><i class="fa fa-search"
+                                    aria-hidden="true"></i> 查看</a>
+                            <a class="btn btn-xs btn-primary" href="/admin/jails/<%- list[i]; %>/edit"><i class="fa fa-pencil"
+                                    aria-hidden="true"></i> 编辑规则</a>
                         </td>
                     </tr>
                     <% } %>

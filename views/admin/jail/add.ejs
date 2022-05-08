@@ -1,0 +1,38 @@
+<%- include('../../includes/header'); %>
+    <div class="jumbotron">
+        <h2>添加新规则</h2>
+        <p>添加新规则并立即执行</p>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">新规则设置</div>
+        <div class="panel-body">
+            <form action="/admin/jail/doAdd" method="POST" class="form-horizontal" enctype="application/json">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">配置文件名称：</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="configFileName" value="myConfig" readonly>
+                            <div class="input-group-addon">.conf</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-warning" role="alert">
+<pre>[new_name]                        
+enabled = true
+bantime = -1
+maxretry = 2
+filter = sshd</pre>
+                </div>
+                <h4 class="text-center">规则设置：</h4>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <textarea class="form-control" rows="6" name="content"></textarea>
+                    </div>
+                </div>
+                <div class="form-group" style="text-align:center">
+                    <input type="submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+    <%- include('../../includes/footer'); %>
