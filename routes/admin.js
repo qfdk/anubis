@@ -32,11 +32,17 @@ bantime = ${bantime}
 maxretry = ${maxretry}
 filter = ${filter}
 `;
-    fs.writeFile(`${JAIL_CONFIG_PATH}/customConfig.conf`, content, { flag: 'a' }, async (err) => {
+    fs.writeFile(`${JAIL_CONFIG_PATH}/${jailname}.conf`, content, (err) => {
         if (err) return res.json(err);
-        exec("fail2ban-client reload", async (err) => {
+        exec("fail2ban-client reload", (err) => {
             if (err) {
-                console.log(err);
+                fs.unlink(`${JAIL_CONFIG_PATH}/${jailname}.conf`, (err) => {
+                    if (err) return res.json(err);
+                    exec("fail2ban-client reload", (err) => {
+                        if (err) return res.json(err);
+                        res.redirect('/admin');
+                    });
+                });
             }
             res.redirect('/admin');
         });
@@ -129,7 +135,7 @@ router.get('/jails/:jailname/delete', async (req, res, next) => {
                         if (err) return res.json(err);
                         res.redirect('/admin');
                     });
-                })
+                });
             }
         }
     });
