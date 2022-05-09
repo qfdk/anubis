@@ -4,8 +4,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const Redis = require('ioredis');
+const redisClient = new Redis();
 
-const {auth} = require("./middlewares/auth");
+const {auth} = require('./middlewares/auth');
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
 
@@ -21,22 +24,23 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
+    store: new RedisStore({client: redisClient}),
     secret: 'anubis',
     resave: true,
     saveUninitialized: true,
-    cookie: {secure: false}
+    cookie: {secure: false},
 }));
 
 app.use('/', indexRouter);
-app.use('/admin', adminRouter);
+app.use('/admin', auth, adminRouter);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

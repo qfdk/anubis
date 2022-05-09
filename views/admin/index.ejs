@@ -1,41 +1,49 @@
 <%- include('../includes/header'); %>
-    <div class="jumbotron">
-        <h2>规则列表</h2>
-        <p>当前规则个数【<%- jails; %>】</p>
-        <a class="btn btn-primary" href="/admin/jail/add"><i class="fa fa-plus-square" aria-hidden="true"></i> 添加新规则</a>
+<div class="jumbotron">
+    <h2>规则列表</h2>
+    <p>展示的规则列表，未激活的规则请仔细检查，删除一个配置文件可能会删除多个规则</p>
+    <a class="btn btn-primary" href="/admin/jail/add"><i class="fa fa-plus-square" aria-hidden="true"></i> 添加新规则</a>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        激活规则【<%- jails; %>】/ 规则列表【<%= results.length; %>】
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            规则列表
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>规则名称</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if(jails>0){ for(let i=0;i < list.length;i++){ %>
-                        <tr>
-                            <th scope="row">
-                                <%- i+1; %>
-                            </th>
-                            <td>
-                                <%- list[i]; %>
-                            </td>
-                            <td>
-                                <a class="btn btn-xs btn-info" href="/admin/jails/<%- list[i]; %>"><i
-                                        class="fa fa-search" aria-hidden="true"></i> 查看</a>
-                                <a class="btn btn-xs btn-primary" href="/admin/jails/<%- list[i]; %>/edit"><i
-                                        class="fa fa-pencil" aria-hidden="true"></i> 编辑规则</a>
-                                <a class="btn btn-xs btn-danger" href="/admin/jails/<%- list[i]; %>/delete"><i
-                                        class="fa fa-trash" aria-hidden="true"></i> 删除规则</a>
-                            </td>
-                        </tr>
-                        <% }} %>
-            </tbody>
-        </table>
-    </div>
-    <%- include('../includes/footer'); %>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>规则名称</th>
+            <th>激活</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if(jails > 0){ for(let i = 0;i < results.length;i++){ %>
+            <tr>
+                <th scope="row">
+                    <%- i + 1; %>
+                </th>
+                <td>
+                    <%- results[i].jailname; %>
+                </td>
+                <td>
+                    <% if(results[i].isActive){ %>
+                        <span class="label label-success">是</span>
+                    <% }else{ %>
+                        <span class="label label-danger">否</span>
+                    <% } %>
+                </td>
+                <td>
+                    <a class="btn btn-xs btn-info" href="/admin/jails/<%- results[i].jailname; %>"><i
+                                class="fa fa-search" aria-hidden="true"></i> 查看</a>
+                    <a class="btn btn-xs btn-primary" href="/admin/jails/<%- results[i].jailname; %>/edit"><i
+                                class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
+                    <a class="btn btn-xs btn-danger" href="/admin/jails/<%- results[i].jailname; %>/delete"><i
+                                class="fa fa-trash" aria-hidden="true"></i> 删除</a>
+                </td>
+            </tr>
+        <% }} %>
+        </tbody>
+    </table>
+</div>
+<%- include('../includes/footer'); %>
