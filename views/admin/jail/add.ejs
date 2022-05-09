@@ -6,27 +6,48 @@
     <div class="panel panel-default">
         <div class="panel-heading">新规则设置</div>
         <div class="panel-body">
+            <h4 class="text-center">规则设置：</h4>
+            <div class="alert alert-info" role="alert">
+                <p>[规则名称],必需填写，enabled 默认开启，bantime = -1 永久禁止，maxretry = 最多尝试次数
+                    filter = 过滤器名称，必需在：/etc/fail2ban/filter.d 寻找 否则不生效</p>
+            </div>
             <form action="/admin/jail/doAdd" method="POST" class="form-horizontal" enctype="application/json">
                 <div class="form-group">
-                    <label class="col-md-4 control-label">配置文件名称：</label>
+                    <label class="col-md-4 control-label">规则名称：</label>
                     <div class="col-md-4">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="configFileName" value="myConfig" readonly>
-                            <div class="input-group-addon">.conf</div>
-                        </div>
+                        <input type="text" class="form-control" name="jailname" value="" required>
                     </div>
                 </div>
-                <div class="alert alert-warning" role="alert">
-<pre>[new_name]                        
-enabled = true
-bantime = -1
-maxretry = 2
-filter = sshd</pre>
-                </div>
-                <h4 class="text-center">规则设置：</h4>
                 <div class="form-group">
-                    <div class="col-md-12">
-                        <textarea class="form-control" rows="6" name="content"></textarea>
+                    <label class="col-md-4 control-label">开启规则：</label>
+                    <div class="col-md-4">
+                        <label class="radio-inline"><input type="radio" name="enabled" value="true" checked>是</label>
+                        <label class="radio-inline"><input type="radio" name="enabled" value="false">否</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">禁止时间：</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="bantime" value="-1" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">最大尝试次数：</label>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" name="maxretry" value="5" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">过滤器：</label>
+                    <div class="col-md-4">
+                        <select class="form-control" id="filter" name="filter" required>
+                            <%for(const filter of filters){%>
+                                <option value="<%=filter;%>">
+                                    <%=filter;%>
+                                </option>
+                                <%}%>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group" style="text-align:center">

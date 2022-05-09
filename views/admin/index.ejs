@@ -28,8 +28,10 @@
                         <td>
                             <a class="btn btn-xs btn-info" href="/admin/jails/<%- list[i]; %>"><i class="fa fa-search"
                                     aria-hidden="true"></i> 查看</a>
-                            <a class="btn btn-xs btn-primary" href="/admin/jails/<%- list[i]; %>/edit"><i class="fa fa-pencil"
-                                    aria-hidden="true"></i> 编辑规则</a>
+                            <a class="btn btn-xs btn-primary" href="/admin/jails/<%- list[i]; %>/edit"><i
+                                    class="fa fa-pencil" aria-hidden="true"></i> 编辑规则</a>
+                            <a class="btn btn-xs btn-danger" href="/admin/jails/<%- list[i]; %>/delete"><i
+                                    class="fa fa-trash" aria-hidden="true"></i> 删除规则</a>
                         </td>
                     </tr>
                     <% } %>
