@@ -27,7 +27,7 @@ app.use(session({
     store: new RedisStore({client: redisClient}),
     secret: 'anubis',
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {secure: false},
 }));
 

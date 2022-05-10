@@ -26,9 +26,9 @@
     "express": "~4.16.1",
     "express-session": "^1.17.2",
     "fail2ban": "git+https://github.com/drudrum/fail2ban.git",
+    "geoip-lite": "^1.4.5",
     "http-errors": "~1.6.3",
     "ioredis": "^5.0.4",
-    "lib-qqwry": "^1.3.2",
     "morgan": "~1.9.1"
   },
   "devDependencies": {

@@ -1,24 +1,18 @@
-const {exec} = require('child_process');
+const { exec } = require('child_process');
 const express = require('express');
 const router = express.Router();
-
-const IP_DATABASE_PATH = require('path').
-    join(__dirname, '../data/qqwry_lastest.dat');
-
+const geoip = require('geoip-lite');
 const Jail = require('fail2ban').Jail;
 const Fail2Ban = require('fail2ban').Fail2Ban;
 const f2bSocket = '/var/run/fail2ban/fail2ban.sock';
 const fs = require('fs');
-let qqwry;
-fs.access(IP_DATABASE_PATH, fs.constants.F_OK, (err) => {
-    qqwry = require('lib-qqwry')(true, err ? null : IP_DATABASE_PATH);
-});
+
 const JAIL_CONFIG_PATH = `/etc/fail2ban/jail.d`;
 const FILTER_CONFIG_PATH = `/etc/fail2ban/filter.d`;
 const fail = new Fail2Ban(f2bSocket);
 
 router.get('/', async (req, res, next) => {
-    const {jails, list} = await fail.status;
+    const { jails, list } = await fail.status;
 
     fs.readdir(JAIL_CONFIG_PATH, (err, configNames) => {
         if (err) return res.json(err);
@@ -44,7 +38,7 @@ router.get('/', async (req, res, next) => {
                 isActive: list.includes(j),
             });
         }
-        res.render('admin/index', {jails, results});
+        res.render('admin/index', { jails, results });
     });
 });
 
@@ -53,12 +47,12 @@ router.get('/jail/add', async (req, res, next) => {
     fs.readdir(FILTER_CONFIG_PATH, (err, files) => {
         if (err) return res.send('ERROR');
         filters = files.map(f => f.split('.conf')[0]);
-        res.render(`admin/jail/add`, {filters});
+        res.render(`admin/jail/add`, { filters });
     });
 });
 
 router.post('/jail/doAdd', async (req, res, next) => {
-    const {jailname, enabled, bantime, maxretry, filter} = req.body;
+    const { jailname, enabled, bantime, maxretry, filter } = req.body;
     const content = `[${jailname}]
 enabled = ${enabled === 'true'}
 bantime = ${bantime}
@@ -89,17 +83,17 @@ router.get('/jails/:jailname', async (req, res, next) => {
         const ips = status.actions.bannedIPList;
         if (ips.length) {
             for (const ip of ips) {
-                const geo = qqwry.searchIP(ip);
+                const geo = geoip.lookup(ip);
                 if (status['info']) {
                     status['info'].push({
                         ip,
-                        ...geo,
+                        ...geo
                     });
                 } else {
                     status['info'] = [
                         {
                             ip,
-                            ...geo,
+                            ...geo
                         }];
                 }
             }
@@ -115,19 +109,19 @@ router.get('/jails/:jailname', async (req, res, next) => {
             info: [],
         };
     }
-    res.render('admin/jail/list', {jailname: req.params.jailname, ...status});
+    res.render('admin/jail/list', { jailname: req.params.jailname, ...status });
 });
 
 router.get('/jails/:jailname/unban', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
-    const {ip} = req.query;
+    const { ip } = req.query;
     await jail.unban(ip);
     res.redirect(`/admin/jails/${req.params.jailname}`);
 });
 
 router.post('/jails/:jailname/ban', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
-    const {ip} = req.body;
+    const { ip } = req.body;
     await jail.ban(ip);
     res.redirect(`/admin/jails/${req.params.jailname}`);
 });
@@ -150,7 +144,7 @@ router.get('/jails/:jailname/edit', async (req, res, next) => {
 });
 
 router.post('/jails/:jailname/doEdit', async (req, res, next) => {
-    const {configFileName, content} = req.body;
+    const { configFileName, content } = req.body;
     fs.writeFile(`${JAIL_CONFIG_PATH}/${configFileName}`, content,
         async (err) => {
             if (err) return res.json(err);
