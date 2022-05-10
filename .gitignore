@@ -304,3 +304,5 @@ dist
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,linux,visualstudiocode,jetbrains+all
+/.idea/codeStyles/codeStyleConfig.xml
+/data/qqwry_lastest.dat

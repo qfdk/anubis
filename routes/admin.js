@@ -1,11 +1,18 @@
 const {exec} = require('child_process');
 const express = require('express');
 const router = express.Router();
+
+const IP_DATABASE_PATH = require('path').
+    join(__dirname, '../data/qqwry_lastest.dat');
+
 const Jail = require('fail2ban').Jail;
 const Fail2Ban = require('fail2ban').Fail2Ban;
 const f2bSocket = '/var/run/fail2ban/fail2ban.sock';
-const geoip = require('fast-geoip');
 const fs = require('fs');
+let qqwry;
+fs.access(IP_DATABASE_PATH, fs.constants.F_OK, (err) => {
+    qqwry = require('lib-qqwry')(true, err ? null : IP_DATABASE_PATH);
+});
 const JAIL_CONFIG_PATH = `/etc/fail2ban/jail.d`;
 const FILTER_CONFIG_PATH = `/etc/fail2ban/filter.d`;
 const fail = new Fail2Ban(f2bSocket);
@@ -82,7 +89,7 @@ router.get('/jails/:jailname', async (req, res, next) => {
         const ips = status.actions.bannedIPList;
         if (ips.length) {
             for (const ip of ips) {
-                const geo = await geoip.lookup(ip);
+                const geo = qqwry.searchIP(ip);
                 if (status['info']) {
                     status['info'].push({
                         ip,

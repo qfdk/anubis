@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "pkg . --out-path=dist",
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "update": "wget https://github.com/out0fmemory/qqwry.dat/raw/master/qqwry_lastest.dat -O ./data/qqwry_lastest.dat"
   },
   "dependencies": {
     "connect-redis": "^6.1.3",
@@ -25,9 +26,9 @@
     "express": "~4.16.1",
     "express-session": "^1.17.2",
     "fail2ban": "git+https://github.com/drudrum/fail2ban.git",
-    "fast-geoip": "^1.1.70",
     "http-errors": "~1.6.3",
     "ioredis": "^5.0.4",
+    "lib-qqwry": "^1.3.2",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
