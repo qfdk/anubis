@@ -5,13 +5,13 @@ router.get('/', function(req, res, next) {
     res.render('login');
 });
 
-router.get('/logout', async (req, res, next) => {
+router.get('/auth/logout', async (req, res, next) => {
     req.session.destroy((err) => {
         res.redirect('/');
     });
 });
 
-router.post('/loginAction', async (req, res, next) => {
+router.post('/auth/login', async (req, res, next) => {
     const {username, password} = req.body;
     const realPassword = process.env.password || 'admin';
     const realUsername = process.env.username || 'admin';
