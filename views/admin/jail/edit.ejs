@@ -6,7 +6,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">新规则设置</div>
         <div class="panel-body">
-            <form action="/admin/jails/<%=jailname;%>/doEdit" method="POST" class="form-horizontal" enctype="application/json">
+            <form action="<%=process.env.BASE_URL_PATH;%>/admin/jails/<%=jailname;%>/doEdit" method="POST" class="form-horizontal" enctype="application/json">
                 <div class="form-group">
                     <label class="col-md-4 control-label">配置文件位置：</label>
                     <div class="col-md-4">

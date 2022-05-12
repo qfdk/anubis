@@ -2,7 +2,7 @@
 <div class="jumbotron">
     <h2>规则列表</h2>
     <p>展示的规则列表，未激活的规则请仔细检查，删除一个配置文件可能会删除多个规则</p>
-    <a class="btn btn-primary" href="/admin/jail/add"><i class="fa fa-plus-square" aria-hidden="true"></i> 添加新规则</a>
+    <a class="btn btn-primary" href="<%=process.env.BASE_URL_PATH;%>/admin/jail/add"><i class="fa fa-plus-square" aria-hidden="true"></i> 添加新规则</a>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -34,11 +34,11 @@
                     <% } %>
                 </td>
                 <td>
-                    <a class="btn btn-xs btn-info" href="/admin/jails/<%- results[i].jailname; %>"><i
+                    <a class="btn btn-xs btn-info" href="<%=process.env.BASE_URL_PATH;%>/admin/jails/<%- results[i].jailname; %>"><i
                                 class="fa fa-search" aria-hidden="true"></i> 查看</a>
-                    <a class="btn btn-xs btn-primary" href="/admin/jails/<%- results[i].jailname; %>/edit"><i
+                    <a class="btn btn-xs btn-primary" href="<%=process.env.BASE_URL_PATH;%>/admin/jails/<%- results[i].jailname; %>/edit"><i
                                 class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
-                    <a class="btn btn-xs btn-danger" href="/admin/jails/<%- results[i].jailname; %>/delete"><i
+                    <a class="btn btn-xs btn-danger" href="<%=process.env.BASE_URL_PATH;%>/admin/jails/<%- results[i].jailname; %>/delete"><i
                                 class="fa fa-trash" aria-hidden="true"></i> 删除</a>
                 </td>
             </tr>

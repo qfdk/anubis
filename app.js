@@ -8,9 +8,10 @@ const RedisStore = require('connect-redis')(session);
 const Redis = require('ioredis');
 const redisClient = new Redis();
 
-const {auth} = require('./middlewares/auth');
+const { auth } = require('./middlewares/auth');
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
+process.env.BASE_URL_PATH = process.env.BASE_URL_PATH ? process.env.BASE_URL_PATH : "";
 
 const app = express();
 
@@ -20,15 +21,15 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    store: new RedisStore({client: redisClient}),
+    store: new RedisStore({ client: redisClient }),
     secret: 'anubis',
     resave: true,
     saveUninitialized: false,
-    cookie: {secure: false},
+    cookie: { secure: false },
 }));
 
 app.use('/', indexRouter);

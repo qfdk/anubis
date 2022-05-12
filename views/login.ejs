@@ -18,7 +18,7 @@
                         <div class="box" style="background-color: #2196f359;">
                             <h4 class="title is-4" style="text-align: center;color: black;">ⲁⲛⲟⲩⲡ - 后台登录</h4>
                         </div>
-                        <form action="/auth/login" method="post" class="box">
+                        <form action="<%=process.env.BASE_URL_PATH;%>/auth/login" method="post" class="box">
                             <div class="field">
                                 <label for="username" class="label">用户名:</label>
                                 <div class="control has-icons-left">

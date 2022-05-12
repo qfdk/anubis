@@ -13,7 +13,8 @@
     "PORT": 1233,
     "TZ": "Europe/Paris",
     "username": "admin",
-    "password": "admin"
+    "password": "admin",
+    "BASE_URL_PATH": "/f2b"
   },
   "log_date_format": "YYYY-MM-DD HH:mm:ss.SSS",
   "error": "./logs/app-err.log",
