@@ -14,3 +14,19 @@ echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://pack
 sudo apt-get update
 sudo apt-get install redis
 ```
+
+
+### nginx 二级目录反代
+
+```bash
+location /f2b/ {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real_IP $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr:$remote_port;
+    proxy_pass http://localhost:1233/;
+    # websocket
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+}
+```
