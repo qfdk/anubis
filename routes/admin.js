@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const {exec} = require('child_process');
 const express = require('express');
 const router = express.Router();
 const geoip = require('geoip-lite');
@@ -12,7 +12,7 @@ const FILTER_CONFIG_PATH = `/etc/fail2ban/filter.d`;
 const fail = new Fail2Ban(f2bSocket);
 
 router.get('/', async (req, res, next) => {
-    const { jails, list } = await fail.status;
+    const {jails, list} = await fail.status;
 
     fs.readdir(JAIL_CONFIG_PATH, (err, configNames) => {
         if (err) return res.json(err);
@@ -39,7 +39,7 @@ router.get('/', async (req, res, next) => {
             });
         }
 
-        res.render('admin/index', { jails, results });
+        res.render('admin/index', {jails, results});
     });
 });
 
@@ -47,12 +47,12 @@ router.get('/jail/add', async (req, res, next) => {
     fs.readdir(FILTER_CONFIG_PATH, (err, files) => {
         if (err) return res.send('ERROR');
         const filters = files.map(f => f.split('.conf')[0]);
-        res.render(`admin/jail/add`, { filters });
+        res.render(`admin/jail/add`, {filters});
     });
 });
 
 router.post('/jail/doAdd', async (req, res, next) => {
-    const { jailname, enabled, bantime, maxretry, filter } = req.body;
+    const {jailname, enabled, bantime, maxretry, filter} = req.body;
     const content = `[${jailname}]
 enabled = ${enabled === 'true'}
 bantime = ${bantime}
@@ -67,11 +67,11 @@ filter = ${filter}
                     if (err) return res.json(err);
                     exec('fail2ban-client reload', (err) => {
                         if (err) return res.json(err);
-                        res.redirect(`/admin`);
+                        res.redirect(`${process.env.BASE_PATH}/admin`);
                     });
                 });
             }
-            res.redirect(`/admin`);
+            res.redirect(`${process.env.BASE_PATH}/admin`);
         });
     });
 });
@@ -108,21 +108,21 @@ router.get('/jails/:jailname', async (req, res, next) => {
             info: [],
         };
     }
-    res.render('admin/jail/list', { jailname: req.params.jailname, ...status });
+    res.render('admin/jail/list', {jailname: req.params.jailname, ...status});
 });
 
 router.get('/jails/:jailname/unban', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
-    const { ip } = req.query;
+    const {ip} = req.query;
     await jail.unban(ip);
-    res.redirect(`/admin/jails/${req.params.jailname}`);
+    res.redirect(`${process.env.BASE_PATH}/admin/jails/${req.params.jailname}`);
 });
 
 router.post('/jails/:jailname/ban', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
-    const { ip } = req.body;
+    const {ip} = req.body;
     await jail.ban(ip);
-    res.redirect(`/admin/jails/${req.params.jailname}`);
+    res.redirect(`${process.env.BASE_PATH}/admin/jails/${req.params.jailname}`);
 });
 
 router.get('/jails/:jailname/edit', async (req, res, next) => {
@@ -143,13 +143,13 @@ router.get('/jails/:jailname/edit', async (req, res, next) => {
 });
 
 router.post('/jails/:jailname/doEdit', async (req, res, next) => {
-    const { configFileName, content } = req.body;
+    const {configFileName, content} = req.body;
     fs.writeFile(`${JAIL_CONFIG_PATH}/${configFileName}`, content,
         async (err) => {
             if (err) return res.json(err);
             exec('fail2ban-client reload', async (err) => {
                 if (err) return res.json(err);
-                res.redirect(`/admin`);
+                res.redirect(`${process.env.BASE_PATH}/admin`);
             });
         });
 });
@@ -166,7 +166,7 @@ router.get('/jails/:jailname/delete', async (req, res, next) => {
                     if (err) return res.json(err);
                     exec('fail2ban-client reload', async (err) => {
                         if (err) return res.json(err);
-                        res.redirect(`/admin`);
+                        res.redirect(`${process.env.BASE_PATH}/admin`);
                     });
                 });
             }
