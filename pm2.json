@@ -13,7 +13,8 @@
     "PORT": 1233,
     "TZ": "Europe/Paris",
     "USERNAME": "admin",
-    "PASSWORD": "admin"
+    "PASSWORD": "admin",
+    "BASE_PATH": ""
   },
   "log_date_format": "YYYY-MM-DD HH:mm:ss.SSS",
   "error": "./logs/app-err.log",

@@ -9,7 +9,7 @@
 <div class="h-full sm:min-h-screen w-full flex flex-col items-center justify-center p-4 mt-20 sm:mt-0">
     <div class="bg-white p-8 rounded-lg shadow-md w-full sm:w-96 mt-10 sm:mt-0">
         <h1 class="sm:block text-2xl font-bold mb-8">ⲁⲛⲟⲩⲡ - 后台登录</h1>
-        <form action="/auth/login" method="post">
+        <form action="<%- process.env.BASE_PATH; %>/auth/login" method="post">
             <div class="mb-4">
                 <label for="username" class="sm:block text-sm font-medium text-gray-700 mb-2">用户名:</label>
                 <input type="text" name="username" id="username" placeholder="" required

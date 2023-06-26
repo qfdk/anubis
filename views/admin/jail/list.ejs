@@ -2,7 +2,7 @@
     <div class="jumbotron">
         <h2>[<%=jailname;%>] 禁止 IP 管理</h2>
         <p>  可以增加禁止的 IP 地址或者删除误操作</p>
-        <form action="/admin/jails/<%=jailname;%>/ban" method="POST" class="form-inline" role="form">
+        <form action="<%- process.env.BASE_PATH; %>/admin/jails/<%=jailname;%>/ban" method="POST" class="form-inline" role="form">
             <div class="form-group">
                 <label class="sr-only" for="">IP地址:</label>
                 <input type="text" class="form-control" id="ip" name="ip" placeholder="IP">
@@ -21,7 +21,6 @@
                     <th style="min-width: 23px;">#</th>
                     <th style="min-width: 125px;">IP</th>
                     <th style="min-width: 44px;">国家</th>
-                    <!-- <th >城市</th> -->
                     <th>操作</th>
                 </tr>
             </thead>
@@ -35,14 +34,11 @@
                             <%- info[i].ip; %>
                         </td>
                         <td>
-                         <img style="width: 30px;" src="/images/flags/<%- info[i].country; %>.png" alt="<%- info[i].country; %>">
+                         <img style="width: 30px;" src="<%- process.env.BASE_PATH; %>/images/flags/<%- info[i].country; %>.png" alt="<%- info[i].country; %>">
                         </td>
-                        <!-- <td>
-                            <%- info[i].city; %>
-                        </td> -->
                         <td>
                             <a class="btn btn-xs btn-danger"
-                                href="/admin/jails/<%=jailname;%>/unban?ip=<%- info[i].ip; %>"><i class="fa fa-trash"
+                                href="<%- process.env.BASE_PATH; %>/admin/jails/<%=jailname;%>/unban?ip=<%- info[i].ip; %>"><i class="fa fa-trash"
                                     aria-hidden="true"></i> 删除</a>
                         </td>
                     </tr>
