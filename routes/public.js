@@ -12,9 +12,9 @@ router.get('/auth/logout', async (req, res, next) => {
 });
 
 router.post('/auth/login', async (req, res, next) => {
-    const { username, password } = req.body;
-    const realPassword = process.env.password;
-    const realUsername = process.env.username;
+    const {username, password} = req.body;
+    const realPassword = process.env.PASSWORD;
+    const realUsername = process.env.USERNAME;
     if (username === realUsername && password === realPassword) {
         req.session['login'] = true;
         res.redirect(`/admin`);
