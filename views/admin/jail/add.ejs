@@ -11,7 +11,7 @@
                 <p>[规则名称],必需填写，enabled 默认开启，bantime = -1 永久禁止，maxretry = 最多尝试次数
                     filter = 过滤器名称，必需在：/etc/fail2ban/filter.d 寻找 否则不生效</p>
             </div>
-            <form action="<%=process.env.BASE_URL_PATH;%>/admin/jail/doAdd" method="POST" class="form-horizontal" enctype="application/json">
+            <form action="/admin/jail/doAdd" method="POST" class="form-horizontal" enctype="application/json">
                 <div class="form-group">
                     <label class="col-md-4 control-label">规则名称：</label>
                     <div class="col-md-4">

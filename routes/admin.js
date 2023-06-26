@@ -38,15 +38,15 @@ router.get('/', async (req, res, next) => {
                 isActive: list.includes(j),
             });
         }
+
         res.render('admin/index', { jails, results });
     });
 });
 
 router.get('/jail/add', async (req, res, next) => {
-    let filters;
     fs.readdir(FILTER_CONFIG_PATH, (err, files) => {
         if (err) return res.send('ERROR');
-        filters = files.map(f => f.split('.conf')[0]);
+        const filters = files.map(f => f.split('.conf')[0]);
         res.render(`admin/jail/add`, { filters });
     });
 });
@@ -67,11 +67,11 @@ filter = ${filter}
                     if (err) return res.json(err);
                     exec('fail2ban-client reload', (err) => {
                         if (err) return res.json(err);
-                        res.redirect(`${process.env.BASE_URL_PATH}/admin`);
+                        res.redirect(`/admin`);
                     });
                 });
             }
-            res.redirect(`${process.env.BASE_URL_PATH}/admin`);
+            res.redirect(`/admin`);
         });
     });
 });
@@ -90,11 +90,10 @@ router.get('/jails/:jailname', async (req, res, next) => {
                         ...geo
                     });
                 } else {
-                    status['info'] = [
-                        {
-                            ip,
-                            ...geo
-                        }];
+                    status['info'] = [{
+                        ip,
+                        ...geo
+                    }];
                 }
             }
         } else {
@@ -116,14 +115,14 @@ router.get('/jails/:jailname/unban', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
     const { ip } = req.query;
     await jail.unban(ip);
-    res.redirect(`${process.env.BASE_URL_PATH}/admin/jails/${req.params.jailname}`);
+    res.redirect(`/admin/jails/${req.params.jailname}`);
 });
 
 router.post('/jails/:jailname/ban', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
     const { ip } = req.body;
     await jail.ban(ip);
-    res.redirect(`${process.env.BASE_URL_PATH}/admin/jails/${req.params.jailname}`);
+    res.redirect(`/admin/jails/${req.params.jailname}`);
 });
 
 router.get('/jails/:jailname/edit', async (req, res, next) => {
@@ -150,7 +149,7 @@ router.post('/jails/:jailname/doEdit', async (req, res, next) => {
             if (err) return res.json(err);
             exec('fail2ban-client reload', async (err) => {
                 if (err) return res.json(err);
-                res.redirect(`${process.env.BASE_URL_PATH}/admin`);
+                res.redirect(`/admin`);
             });
         });
 });
@@ -167,7 +166,7 @@ router.get('/jails/:jailname/delete', async (req, res, next) => {
                     if (err) return res.json(err);
                     exec('fail2ban-client reload', async (err) => {
                         if (err) return res.json(err);
-                        res.redirect(`${process.env.BASE_URL_PATH}/admin`);
+                        res.redirect(`/admin`);
                     });
                 });
             }
