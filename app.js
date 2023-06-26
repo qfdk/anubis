@@ -17,7 +17,6 @@ app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'anubis',
     resave: true,
@@ -28,8 +27,16 @@ app.use((req, res, next) => {
     logger.debug(`${req.method} - ${req.originalUrl}`);
     next();
 });
-app.use(`${process.env.BASE_PATH}/admin`, auth, adminRouter);
-app.use(`${process.env.BASE_PATH}`, publicRouter);
+
+const basePath = process.env.BASE_PATH || '';
+const usePath = (path, ...handlers) => app.use(basePath + path, ...handlers);
+
+// Use static middleware
+usePath('/', express.static(path.join(__dirname, 'public')));
+
+// Use routers
+usePath('/', publicRouter);
+usePath('/admin', auth, adminRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -37,7 +44,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
