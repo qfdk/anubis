@@ -7,7 +7,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/auth/logout', async (req, res, next) => {
     req.session.destroy((err) => {
-        res.redirect(`/`);
+        res.redirect(`${process.env.BASE_PATH === '' ? '/' : process.env.BASE_PATH}`);
     });
 });
 
@@ -17,9 +17,9 @@ router.post('/auth/login', async (req, res, next) => {
     const realUsername = process.env.USERNAME;
     if (username === realUsername && password === realPassword) {
         req.session['login'] = true;
-        res.redirect(`/admin`);
+        res.redirect(`${process.env.BASE_PATH}/admin`);
     } else {
-        res.redirect(`/`);
+        res.redirect(`${process.env.BASE_PATH === '' ? '/' : process.env.BASE_PATH}`);
     }
 });
 

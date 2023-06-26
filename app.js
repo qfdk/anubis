@@ -8,6 +8,7 @@ const session = require('express-session');
 const {auth} = require('./middlewares/auth');
 const publicRouter = require('./routes/public');
 const adminRouter = require('./routes/admin');
+const {logger} = require("./utils/logger");
 const app = express();
 
 // view engine setup
@@ -23,7 +24,10 @@ app.use(session({
     saveUninitialized: false,
     cookie: {secure: false},
 }));
-
+app.use((req, res, next) => {
+    logger.debug(`${req.method} - ${req.originalUrl}`);
+    next();
+});
 app.use(`${process.env.BASE_PATH}/admin`, auth, adminRouter);
 app.use(`${process.env.BASE_PATH}`, publicRouter);
 
