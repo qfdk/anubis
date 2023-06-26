@@ -3,13 +3,11 @@ require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const { auth } = require('./middlewares/auth');
 const publicRouter = require('./routes/public');
 const adminRouter = require('./routes/admin');
-const { log } = require('console');
 const app = express();
 
 // view engine setup
@@ -18,7 +16,6 @@ app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'anubis',
