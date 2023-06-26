@@ -20,14 +20,30 @@ sudo systemctl enable redis-server
 ### nginx 二级目录反代
 
 ```bash
-location /f2b/ {
+
+location /f2b {
     proxy_set_header Host $host;
     proxy_set_header X-Real_IP $remote_addr;
     proxy_set_header X-Forwarded-For $remote_addr:$remote_port;
-    proxy_pass http://localhost:1233/;
+    proxy_pass http://localhost:1233/f2b;
     # websocket
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection $connection_upgrade;
 }
+
+location ~* ^/f2b/javascripts/(.+\.(js))$ {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real_IP $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr:$remote_port;
+    proxy_pass http://localhost:1233/f2b/javascripts/$1;
+}
+
+location ~* ^/f2b/images/flags/(.+\.(png|jpg|jpeg|gif))$ {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real_IP $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr:$remote_port;
+    proxy_pass http://localhost:1233/f2b/images/flags/$1;
+}
+
 ```
