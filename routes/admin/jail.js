@@ -116,14 +116,14 @@ router.get('/unban/:jailname', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
     const {ip} = req.query;
     await jail.unban(ip);
-    res.redirect(`${process.env.BASE_PATH}/admin/jails/${req.params.jailname}`);
+    res.redirect(`${process.env.BASE_PATH}/admin/jails/info/${req.params.jailname}`);
 });
 
 router.post('/ban/:jailname', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
     const {ip} = req.body;
     await jail.ban(ip);
-    res.redirect(`${process.env.BASE_PATH}/admin/jails/${req.params.jailname}`);
+    res.redirect(`${process.env.BASE_PATH}/admin/jails/info/${req.params.jailname}`);
 });
 
 router.get('/edit/:jailname', async (req, res, next) => {
