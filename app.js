@@ -8,7 +8,7 @@ const session = require('express-session');
 const {auth} = require('./middlewares/auth');
 const publicRouter = require('./routes/public');
 const adminRouter = require('./routes/admin');
-const {logger} = require("./utils/logger");
+const {logger} = require('./utils/logger');
 const app = express();
 
 // view engine setup

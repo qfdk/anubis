@@ -1,0 +1,43 @@
+<%- include('../../includes/header'); %>
+<div class="jumbotron">
+    <h2>过滤器管理</h2>
+    <p>可以增加过滤器或者删除误操作</p>
+    <a class="btn btn-primary" href="<%- process.env.BASE_PATH; %>/admin/filters/add"><i class="fa fa-plus-square"
+                                                                                         aria-hidden="true"></i> 添加新过滤器</a>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        目前拥有【<%- filters.length; %>】个过滤器
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="min-width: 23px;">#</th>
+            <th style="min-width: 125px;">过滤器名称</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for(let i = 0;i < filters.length;i++){ %>
+            <tr>
+                <th scope="row">
+                    <%- i + 1; %>
+                </th>
+                <td>
+                    <%- filters[i]; %>
+                </td>
+                <td>
+                    <a class="btn btn-xs btn-primary"
+                       href="<%- process.env.BASE_PATH; %>/admin/filters/edit/<%- filters[i]; %>"><i
+                                class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
+                    <a class="btn btn-xs btn-danger"
+                       href="<%- process.env.BASE_PATH; %>/admin/filters/delete/<%- filters[i]; %>"><i
+                                class="fa fa-trash"
+                                aria-hidden="true"></i> 删除</a>
+                </td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+<%- include('../../includes/footer'); %>
