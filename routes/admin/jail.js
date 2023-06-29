@@ -80,37 +80,22 @@ filter = ${filter}
 router.get('/info/:jailname', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
     let status = await jail.status;
-    if (status) {
-        const ips = status.actions.bannedIPList;
-        if (ips.length) {
-            for (const ip of ips) {
-                const geo = geoip.lookup(ip);
-                if (status['info']) {
-                    status['info'].push({
-                        ip,
-                        ...geo
-                    });
-                } else {
-                    status['info'] = [{
-                        ip,
-                        ...geo
-                    }];
-                }
-            }
+    status = status || {info: []};
+
+    const ips = status.actions?.bannedIPList || [];
+    for (const ip of ips) {
+        const geo = geoip.lookup(ip);
+        const country = geo?.country || 'RU';
+
+        if (status.info) {
+            status.info.push({ip, country});
         } else {
-            status = {
-                ...status,
-                info: [],
-            };
+            status.info = [{ip, country}];
         }
-    } else {
-        status = {
-            ...status,
-            info: [],
-        };
     }
     res.render('admin/jail/list', {jailname: req.params.jailname, actions: [], ...status});
 });
+
 
 router.get('/unban/:jailname', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
