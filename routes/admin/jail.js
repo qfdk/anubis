@@ -4,43 +4,44 @@ const router = express.Router();
 const geoip = require('geoip-lite');
 const Jail = require('fail2ban').Jail;
 const Fail2Ban = require('fail2ban').Fail2Ban;
-const f2bSocket = '/var/run/fail2ban/fail2ban.sock';
+const f2bSocket = process.env.F2B_SOCKET_PATH || '/var/run/fail2ban/fail2ban.sock';
+const util = require('util');
 const fs = require('fs');
+
+const readdir = util.promisify(fs.readdir);
+const readFile = util.promisify(fs.readFile);
 
 const JAIL_CONFIG_PATH = `/etc/fail2ban/jail.d`;
 const FILTER_CONFIG_PATH = `/etc/fail2ban/filter.d`;
 const fail = new Fail2Ban(f2bSocket);
 
 router.get('/', async (req, res, next) => {
-    const {jails, list} = await fail.status;
+    try {
+        const {jails, list} = await fail.status;
 
-    fs.readdir(JAIL_CONFIG_PATH, (err, configNames) => {
-        if (err) return res.json(err);
+        const configNames = await readdir(JAIL_CONFIG_PATH);
         const regex = /\[\w+\]/gm;
         const jailsInDir = [];
+
         for (const config of configNames) {
             const configPath = `${JAIL_CONFIG_PATH}/${config}`;
-            const content = fs.readFileSync(configPath, 'utf-8');
+            const content = await readFile(configPath, 'utf-8');
             let m;
+
             while ((m = regex.exec(content)) !== null) {
-                if (m.index === regex.lastIndex) {
-                    regex.lastIndex++;
-                }
-                m.forEach((jail, groupIndex) => {
-                    jailsInDir.push(jail.substring(1, jail.length - 1));
-                });
+                jailsInDir.push(m[0].substring(1, m[0].length - 1));
             }
         }
-        const results = [];
-        for (const j of jailsInDir) {
-            results.push({
-                jailname: j,
-                isActive: list.includes(j),
-            });
-        }
+
+        const results = jailsInDir.map((jail) => ({
+            jailname: jail,
+            isActive: list.includes(jail),
+        }));
 
         res.render('admin/index', {jails, results});
-    });
+    } catch (err) {
+        res.json(err);
+    }
 });
 
 router.get('/add', async (req, res, next) => {

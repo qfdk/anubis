@@ -12,5 +12,5 @@ log4js.configure({
 });
 
 module.exports = {
-    logger,
+    logger
 };

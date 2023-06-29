@@ -1,6 +1,6 @@
 <%- include('../includes/header'); %>
 <div class="jumbotron">
-    <h2>规则列表</h2>
+    <h2>监狱列表</h2>
     <p>展示的规则列表，未激活的规则请仔细检查，删除一个配置文件可能会删除多个规则</p>
     <a class="btn btn-primary" href="<%- process.env.BASE_PATH; %>/admin/jails/add"><i class="fa fa-plus-square"
                                                                                       aria-hidden="true"></i> 添加新规则</a>
@@ -13,7 +13,7 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>规则名称</th>
+            <th>监狱名称</th>
             <th>激活</th>
             <th>操作</th>
         </tr>
@@ -37,7 +37,7 @@
                 <td>
                     <a class="btn btn-xs btn-info"
                        href="<%- process.env.BASE_PATH; %>/admin/jails/info/<%- results[i].jailname; %>"><i
-                                class="fa fa-search" aria-hidden="true"></i> 查看</a>
+                                class="fa fa-search" aria-hidden="true"></i> 探视</a>
                     <a class="btn btn-xs btn-primary"
                        href="<%- process.env.BASE_PATH; %>/admin/jails/edit/<%- results[i].jailname; %>"><i
                                 class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>

@@ -1,6 +1,6 @@
 <%- include('../../includes/header'); %>
     <div class="jumbotron">
-        <h2>[<%=jailname;%>] 禁止 IP 管理</h2>
+        <h2>【<%=jailname;%>】 禁止 IP 管理</h2>
         <p>  可以增加禁止的 IP 地址或者删除误操作</p>
         <form action="<%- process.env.BASE_PATH; %>/admin/jails/ban/<%=jailname;%>" method="POST" class="form-inline" role="form">
             <div class="form-group">

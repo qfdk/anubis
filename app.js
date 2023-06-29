@@ -40,6 +40,7 @@ usePath('/admin', auth, adminRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
+    console.log(req.originalUrl);
     next(createError(404));
 });
 

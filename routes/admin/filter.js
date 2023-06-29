@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const {reloadFail2ban} = require('../../utils');
+
 const FILTER_CONFIG_PATH = process.env.fail2ban_filter_path || `/etc/fail2ban/filter.d`;
 
 router.get('/', (req, res) => {
@@ -20,14 +22,18 @@ router.post('/doAdd', (req, res) => {
     const {filterName, filterContent} = req.body;
     fs.writeFile(`${FILTER_CONFIG_PATH}/${filterName}.conf`, filterContent, (err) => {
         if (err) return res.json(err);
-        res.redirect(`${process.env.BASE_PATH}/admin/filters`);
+        reloadFail2ban((err) => {
+            if (err) {
+                return res.send(err);
+            }
+            res.redirect(`${process.env.BASE_PATH}/admin/filters`);
+        });
     });
 });
 
 router.get('/edit/:filterName', (req, res) => {
     const {filterName} = req.params;
     fs.readFile(`${FILTER_CONFIG_PATH}/${filterName}.conf`, (err, filterContent) => {
-
         res.render(`admin/filter/edit`, {filterName, filterContent});
     });
 });
