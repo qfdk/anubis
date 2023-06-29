@@ -79,20 +79,14 @@ filter = ${filter}
 
 router.get('/info/:jailname', async (req, res, next) => {
     const jail = new Jail(req.params.jailname, f2bSocket);
-    let status = await jail.status;
-    status = status || {info: []};
-
+    const status = await jail.status || {info: []};
     const ips = status.actions?.bannedIPList || [];
-    for (const ip of ips) {
+    status.info = ips.map(ip => {
         const geo = geoip.lookup(ip);
-        const country = geo?.country || 'RU';
+        const country = geo?.country || 'JP';
+        return {ip, country};
+    });
 
-        if (status.info) {
-            status.info.push({ip, country});
-        } else {
-            status.info = [{ip, country}];
-        }
-    }
     res.render('admin/jail/list', {jailname: req.params.jailname, actions: [], ...status});
 });
 
