@@ -8,7 +8,6 @@ const session = require('express-session');
 const {auth} = require('./middlewares/auth');
 const publicRouter = require('./routes/public');
 const adminRouter = require('./routes/admin');
-const {logger} = require('./utils/logger');
 const app = express();
 
 // view engine setup
@@ -21,12 +20,8 @@ app.use(session({
     secret: 'anubis',
     resave: true,
     saveUninitialized: false,
-    cookie: {secure: false},
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 14},  // 设置 cookie 的过期时间为14 天
 }));
-app.use((req, res, next) => {
-    logger.debug(`${req.method} - ${req.originalUrl}`);
-    next();
-});
 
 const basePath = process.env.BASE_PATH || '';
 const usePath = (path, ...handlers) => app.use(basePath + path, ...handlers);
