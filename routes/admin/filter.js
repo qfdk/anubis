@@ -3,10 +3,10 @@ const router = express.Router();
 const fs = require('fs');
 const {reloadFail2ban} = require('../../utils');
 
-const FILTER_CONFIG_PATH = process.env.fail2ban_filter_path || `/etc/fail2ban/filter.d`;
+const FILTER_PATH = process.env.FAIL2BAN_FILTER_PATH || `/etc/fail2ban/filter.d`;
 
 router.get('/', (req, res) => {
-    fs.readdir(FILTER_CONFIG_PATH, (err, files) => {
+    fs.readdir(FILTER_PATH, (err, files) => {
         if (err) return res.send('ERROR');
         const filters = files.map(f => f.split('.conf')[0]);
         res.render(`admin/filter/list`, {filters});
@@ -20,7 +20,7 @@ router.get('/add', (req, res) => {
 
 router.post('/doAdd', (req, res) => {
     const {filterName, filterContent} = req.body;
-    fs.writeFile(`${FILTER_CONFIG_PATH}/${filterName}.conf`, filterContent, (err) => {
+    fs.writeFile(`${FILTER_PATH}/${filterName}.conf`, filterContent, (err) => {
         if (err) return res.json(err);
         reloadFail2ban((err) => {
             if (err) {
@@ -33,14 +33,14 @@ router.post('/doAdd', (req, res) => {
 
 router.get('/edit/:filterName', (req, res) => {
     const {filterName} = req.params;
-    fs.readFile(`${FILTER_CONFIG_PATH}/${filterName}.conf`, (err, filterContent) => {
+    fs.readFile(`${FILTER_PATH}/${filterName}.conf`, (err, filterContent) => {
         res.render(`admin/filter/edit`, {filterName, filterContent});
     });
 });
 
 router.get('/delete/:filterName', (req, res) => {
     const {filterName} = req.params;
-    fs.unlinkSync(`${FILTER_CONFIG_PATH}/${filterName}.conf`);
+    fs.unlinkSync(`${FILTER_PATH}/${filterName}.conf`);
     res.redirect(`${process.env.BASE_PATH}/admin/filters`);
 });
 

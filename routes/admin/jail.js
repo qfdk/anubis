@@ -2,29 +2,28 @@ const {exec} = require('child_process');
 const express = require('express');
 const router = express.Router();
 const geoip = require('geoip-lite');
-const Jail = require('fail2ban').Jail;
-const Fail2Ban = require('fail2ban').Fail2Ban;
-const f2bSocket = process.env.F2B_SOCKET_PATH || '/var/run/fail2ban/fail2ban.sock';
+const {Jail, Fail2Ban} = require('fail2ban');
 const util = require('util');
 const fs = require('fs');
-
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 
-const JAIL_CONFIG_PATH = `/etc/fail2ban/jail.d`;
-const FILTER_CONFIG_PATH = `/etc/fail2ban/filter.d`;
+const f2bSocket = process.env.FAIL2BAN_SOCKET_PATH || '/var/run/fail2ban/fail2ban.sock';
+const JAIL_PATH = process.env.FAIL2BAN_JAIL_PATH || `/etc/fail2ban/jail.d`;
+const FILTER_PATH = process.env.FAIL2BAN_FILTER_PATH || `/etc/fail2ban/filter.d`;
+
 const fail = new Fail2Ban(f2bSocket);
 
 router.get('/', async (req, res, next) => {
     try {
         const {jails, list} = await fail.status;
 
-        const configNames = await readdir(JAIL_CONFIG_PATH);
+        const configNames = await readdir(JAIL_PATH);
         const regex = /\[\w+\]/gm;
         const jailsInDir = [];
 
         for (const config of configNames) {
-            const configPath = `${JAIL_CONFIG_PATH}/${config}`;
+            const configPath = `${JAIL_PATH}/${config}`;
             const content = await readFile(configPath, 'utf-8');
             let m;
 
@@ -45,7 +44,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/add', async (req, res, next) => {
-    fs.readdir(FILTER_CONFIG_PATH, (err, files) => {
+    fs.readdir(FILTER_PATH, (err, files) => {
         if (err) return res.send('ERROR');
         const filters = files.map(f => f.split('.conf')[0]);
         res.render(`admin/jail/add`, {filters});
@@ -60,11 +59,11 @@ bantime = ${bantime}
 maxretry = ${maxretry}
 filter = ${filter}
 `;
-    fs.writeFile(`${JAIL_CONFIG_PATH}/${jailname}.conf`, content, (err) => {
+    fs.writeFile(`${JAIL_PATH}/${jailname}.conf`, content, (err) => {
         if (err) return res.json(err);
         exec('fail2ban-client reload', (err) => {
             if (err) {
-                fs.unlink(`${JAIL_CONFIG_PATH}/${jailname}.conf`, (err) => {
+                fs.unlink(`${JAIL_PATH}/${jailname}.conf`, (err) => {
                     if (err) return res.json(err);
                     exec('fail2ban-client reload', (err) => {
                         if (err) return res.json(err);
@@ -106,10 +105,10 @@ router.post('/ban/:jailname', async (req, res, next) => {
 });
 
 router.get('/edit/:jailname', async (req, res, next) => {
-    fs.readdir(JAIL_CONFIG_PATH, (err, files) => {
+    fs.readdir(JAIL_PATH, (err, files) => {
         if (err) return res.send('ERROR');
         for (const file of files) {
-            const content = fs.readFileSync(`${JAIL_CONFIG_PATH}/${file}`,
+            const content = fs.readFileSync(`${JAIL_PATH}/${file}`,
                 'utf-8');
             if (content.includes(`[${req.params.jailname}]`)) {
                 res.render('admin/jail/edit', {
@@ -124,7 +123,7 @@ router.get('/edit/:jailname', async (req, res, next) => {
 
 router.post('/doEdit/:jailname', async (req, res, next) => {
     const {configFileName, content} = req.body;
-    fs.writeFile(`${JAIL_CONFIG_PATH}/${configFileName}`, content,
+    fs.writeFile(`${JAIL_PATH}/${configFileName}`, content,
         async (err) => {
             if (err) return res.json(err);
             exec('fail2ban-client reload', async (err) => {
@@ -135,10 +134,10 @@ router.post('/doEdit/:jailname', async (req, res, next) => {
 });
 
 router.get('/delete/:jailname', async (req, res, next) => {
-    fs.readdir(JAIL_CONFIG_PATH, (err, files) => {
+    fs.readdir(JAIL_PATH, (err, files) => {
         if (err) return res.send('ERROR');
         for (const file of files) {
-            const filePath = `${JAIL_CONFIG_PATH}/${file}`;
+            const filePath = `${JAIL_PATH}/${file}`;
             const content = fs.readFileSync(filePath, 'utf-8');
             if (content.includes(`[${req.params.jailname}]`)) {
                 // 删除配置文件并重新载入client
