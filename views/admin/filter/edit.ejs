@@ -6,17 +6,20 @@
     <div class="panel-heading">规则设置</div>
     <div class="panel-body">
         <h4 class="text-center">规则设置：</h4>
-        <form action="<%- process.env.BASE_PATH; %>/admin/filters/doAdd" method="POST" class="form-horizontal">
+        <form id='form' action="<%- process.env.BASE_PATH; %>/admin/filters/doAdd" method="POST"
+              class="form-horizontal">
             <div class="form-group">
                 <label class="col-md-4 control-label">过滤器名称：</label>
                 <div class="col-md-4">
-                    <input type="text" class="form-control" name="filterName" value="<%- filterName; %>" required readonly>
+                    <input type="text" class="form-control" name="filterName" value="<%- filterName; %>" required
+                           readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">过滤器内容：</label>
                 <div class="col-md-12">
-                    <textarea class="form-control" rows="12" name="filterContent"><%- filterContent; %></textarea>
+                    <input id="filterContent" type="hidden" name="filterContent">
+                    <div id="container" style="height:400px;border:1px solid grey"></div>
                 </div>
             </div>
 
@@ -26,4 +29,26 @@
         </form>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.min.js"></script>
+<script>
+    require.config({
+        paths: {
+            'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs'
+        }
+    });
+    var editor;
+    require(['vs/editor/editor.main'], function () {
+        var contentArray = <%- JSON.stringify(filterContent) %>; // 从服务器获取的原始数据数组
+        var content = contentArray.join('\n'); // 将数组连接成一个字符串，每一行用换行符分隔
+        editor = monaco.editor.create(document.getElementById('container'), {
+            value: content,
+            language: 'ini',
+            theme: 'vs-dark',
+            fontSize: 14,  // 设置字体大小为 14px
+        });
+    });
+    document.getElementById('form').addEventListener('submit', function (e) {
+        document.getElementById('filterContent').value = editor?.getValue();
+    });
+</script>
 <%- include('../../includes/footer'); %>

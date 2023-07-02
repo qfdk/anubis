@@ -6,7 +6,8 @@
     <div class="panel-heading">新规则设置</div>
     <div class="panel-body">
         <h4 class="text-center">规则设置：</h4>
-        <form action="<%- process.env.BASE_PATH; %>/admin/filters/doAdd" method="POST" class="form-horizontal">
+        <form id="form" action="<%- process.env.BASE_PATH; %>/admin/filters/doAdd" method="POST"
+              class="form-horizontal">
             <div class="form-group">
                 <label class="col-md-4 control-label">过滤器名称：</label>
                 <div class="col-md-4">
@@ -16,9 +17,8 @@
             <div class="form-group">
                 <label class="col-md-4 control-label">过滤器内容：</label>
                 <div class="col-md-12">
-                    <textarea class="form-control" rows="12" name="filterContent">[Definition]
-failregex = ^<HOST>.*"(GET|POST).*" (404|444|403|400) .*$
-ignoreregex =</textarea>
+                    <div id="container" style="height:400px;border:1px solid grey"></div>
+                    <input id="filterContent" type="hidden" name="filterContent">
                 </div>
             </div>
 
@@ -28,4 +28,5 @@ ignoreregex =</textarea>
         </form>
     </div>
 </div>
+<%- include('./editorAdd'); %>
 <%- include('../../includes/footer'); %>

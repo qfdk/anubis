@@ -27,7 +27,8 @@
     "fail2ban": "git+https://github.com/drudrum/fail2ban.git",
     "geoip-lite": "^1.4.7",
     "http-errors": "~1.6.3",
-    "log4js": "^6.9.1"
+    "log4js": "^6.9.1",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.16",

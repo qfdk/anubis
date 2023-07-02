@@ -34,7 +34,7 @@ router.post('/doAdd', (req, res) => {
 router.get('/edit/:filterName', (req, res) => {
     const {filterName} = req.params;
     fs.readFile(`${FILTER_PATH}/${filterName}.conf`, (err, filterContent) => {
-        res.render(`admin/filter/edit`, {filterName, filterContent});
+        res.render(`admin/filter/edit`, {filterName, filterContent: filterContent.toString('utf8').split('\n')});
     });
 });
 

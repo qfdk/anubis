@@ -114,7 +114,7 @@ router.get('/edit/:jailname', async (req, res, next) => {
                 res.render('admin/jail/edit', {
                     configFileName: file,
                     jailname: req.params.jailname,
-                    content,
+                    content: content.split('\n'),
                 });
             }
         }

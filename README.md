@@ -4,20 +4,18 @@
 
 掌管自动禁止 IP 工作，本管理界面可以对默认 SSH 禁止IP 进行管理， 需要 fail2ban 安装
 
-### 安装 Redis
+### 使用教程
+- 推荐使用 Ubuntu 20.04+, 理论上centOS 配置好也可以使用
+- 安装fail2ban
+- 修改 `.env.example` 到 `.env`, 默认配置即可, 默认端口为 `1233`
+- 可以使用打包命令或者,直接用PM2启动项目, `pm2 start pm2.json` 当然里面的配置也需要对应的修改,如果不修改 ubuntu 默认可以使用
 
-```bash
-curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-
-echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-
-sudo apt-get update
-sudo apt-get install redis
-sudo systemctl enable redis-server
-```
-
+### 可以使用反向代理
+- 推荐使用nginx设置反向代理, 1233 端口是在救命的时候使用
 
 ### nginx 二级目录反代
+
+*NOTE : 不推荐使用 除非你知道你在干什么*
 
 ```bash
 
@@ -47,3 +45,10 @@ location ~* ^/f2b/images/flags/(.+\.(png|jpg|jpeg|gif))$ {
 }
 
 ```
+
+### 屏幕截图
+
+![1](docs/images/1.png)
+![2](docs/images/2.png)
+![3](docs/images/3.png)
+![4](docs/images/4.png)

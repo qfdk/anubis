@@ -4,6 +4,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
+const favicon = require('serve-favicon');
 
 const {auth} = require('./middlewares/auth');
 const publicRouter = require('./routes/public');
@@ -27,8 +28,8 @@ const basePath = process.env.BASE_PATH || '';
 const usePath = (path, ...handlers) => app.use(basePath + path, ...handlers);
 
 // Use static middleware
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 usePath('/', express.static(path.join(__dirname, 'public')));
-
 // Use routers
 usePath('/', publicRouter);
 usePath('/admin', auth, adminRouter);

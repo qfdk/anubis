@@ -1,0 +1,25 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.min.js"></script>
+<script>
+    require.config({
+        paths: {
+            'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs'
+        }
+    });
+    var editor;
+    require(['vs/editor/editor.main'], function () {
+        editor = monaco.editor.create(document.getElementById('container'), {
+            value: [
+                "[Definition]",
+                `failregex = ^<HOST>.*"(GET|POST).*" (404|444|403|400) .*$`,
+                `ignoreregex =`,
+                `logpath  = /www/wwwlogs/*.log`
+            ].join('\n'),
+            language: 'ini',
+            theme: 'vs-dark',
+            fontSize: 14,  // 设置字体大小为 14px
+        });
+    });
+    document.getElementById('form').addEventListener('submit', function (e) {
+        document.getElementById('filterContent').value = editor?.getValue();
+    });
+</script>
