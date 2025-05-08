@@ -269,7 +269,6 @@ dist
 .pnp.*
 
 # pnpm
-pnpm-lock.yaml
 .pnpm-store/
 
 ### Node Patch ###

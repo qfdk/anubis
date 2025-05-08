@@ -5,9 +5,8 @@
  */
 
 const app = require('../app');
-const debug = require('debug')('anubis:server');
 const http = require('http');
-const { logger, shutdown } = require('../utils/logger');
+const {logger, shutdown} = require('../utils/logger');
 
 /**
  * Get port from environment and store in Express.
@@ -31,32 +30,32 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 // 优雅关闭
- process.on('SIGTERM', () => {
-  logger.info('收到 SIGTERM 信号，正在优雅关闭服务器...');
-  server.close(async () => {
-    logger.info('服务器关闭完成');
-    await shutdown();
-    process.exit(0);
-  });
+process.on('SIGTERM', () => {
+    logger.info('收到 SIGTERM 信号，正在优雅关闭服务器...');
+    server.close(async () => {
+        logger.info('服务器关闭完成');
+        await shutdown();
+        process.exit(0);
+    });
 });
 
 process.on('SIGINT', () => {
-  logger.info('收到 SIGINT 信号，正在优雅关闭服务器...');
-  server.close(async () => {
-    logger.info('服务器关闭完成');
-    await shutdown();
-    process.exit(0);
-  });
+    logger.info('收到 SIGINT 信号，正在优雅关闭服务器...');
+    server.close(async () => {
+        logger.info('服务器关闭完成');
+        await shutdown();
+        process.exit(0);
+    });
 });
 
 // 处理未捕获的异常
 process.on('uncaughtException', (err) => {
-  logger.error(`未捕获的异常: ${err.message}\n${err.stack}`);
-  process.exit(1);
+    logger.error(`未捕获的异常: ${err.message}\n${err.stack}`);
+    process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  logger.error(`未处理的Promise拒绝: ${reason}`);
+    logger.error(`未处理的Promise拒绝: ${reason}`);
 });
 
 /**
@@ -64,19 +63,19 @@ process.on('unhandledRejection', (reason, promise) => {
  */
 
 function normalizePort(val) {
-  const port = parseInt(val, 10);
+    const port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
 
-  return false;
+    return false;
 }
 
 /**
@@ -84,27 +83,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    const bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      logger.error(`${bind} requires elevated privileges`);
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      logger.error(`${bind} is already in use`);
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            logger.error(`${bind} requires elevated privileges`);
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            logger.error(`${bind} is already in use`);
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
 /**
@@ -112,20 +111,20 @@ function onError(error) {
  */
 
 function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  logger.info(`服务器已启动并监听在 ${bind} 上`);
-  
-  if (process.env.NODE_ENV === 'production') {
-    logger.info('Anubis 服务器已在生产模式下启动');
-  } else {
-    logger.info('Anubis 服务器已在开发模式下启动');
-  }
-  
-  // 记录服务器信息
-  logger.info(`
+    const addr = server.address();
+    const bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    logger.info(`服务器已启动并监听在 ${bind} 上`);
+
+    if (process.env.NODE_ENV === 'production') {
+        logger.info('Anubis 服务器已在生产模式下启动');
+    } else {
+        logger.info('Anubis 服务器已在开发模式下启动');
+    }
+
+    // 记录服务器信息
+    logger.info(`
     域名前缀: ${process.env.BASE_PATH || '/'}
     日志级别: ${process.env.LOG_LEVEL || 'info'}
     Fail2Ban Socket: ${process.env.FAIL2BAN_SOCKET_PATH || '/var/run/fail2ban/fail2ban.sock'}
