@@ -31,7 +31,14 @@ read -p "使用生产模式？需要系统安装fail2ban (y/n): " production
 if [ "$production" = "y" ] || [ "$production" = "Y" ]; then
     # 生产模式
     echo "设置生产模式，使用真实fail2ban数据..."
-    sed -i '' '/IS_MOCK=/d' .env
+    # 检测操作系统类型并使用正确的sed语法
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS (BSD) sed
+        sed -i '' '/IS_MOCK=/d' .env
+    else
+        # Linux (GNU) sed
+        sed -i '/IS_MOCK=/d' .env
+    fi
     echo "IS_MOCK=false" >> .env
     
     # 检查fail2ban是否安装
@@ -46,7 +53,14 @@ if [ "$production" = "y" ] || [ "$production" = "Y" ]; then
 else
     # 开发模式
     echo "设置开发模式，使用模拟数据..."
-    sed -i '' '/IS_MOCK=/d' .env
+    # 检测操作系统类型并使用正确的sed语法
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS (BSD) sed
+        sed -i '' '/IS_MOCK=/d' .env
+    else
+        # Linux (GNU) sed
+        sed -i '/IS_MOCK=/d' .env
+    fi
     echo "IS_MOCK=true" >> .env
     
     # 创建模拟数据目录
