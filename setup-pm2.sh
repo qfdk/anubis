@@ -9,13 +9,24 @@ NC='\033[0m' # No Color
 echo -e "${GREEN}Anubis PM2 设置脚本${NC}"
 echo "===================="
 
+# 检查pnpm是否安装
+if ! command -v pnpm &> /dev/null; then
+    echo -e "${YELLOW}未找到pnpm，正在尝试安装...${NC}"
+    npm install -g pnpm
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}安装pnpm失败，请手动安装后再运行此脚本。${NC}"
+        echo "npm install -g pnpm"
+        exit 1
+    fi
+fi
+
 # 检查pm2是否安装
 if ! command -v pm2 &> /dev/null; then
     echo -e "${YELLOW}未找到PM2，正在尝试安装...${NC}"
-    npm install -g pm2
+    pnpm add -g pm2
     if [ $? -ne 0 ]; then
         echo -e "${RED}安装PM2失败，请手动安装后再运行此脚本。${NC}"
-        echo "npm install -g pm2"
+        echo "pnpm add -g pm2"
         exit 1
     fi
 fi
@@ -43,7 +54,7 @@ fi
 
 # 安装依赖
 echo -e "${YELLOW}正在安装依赖...${NC}"
-npm install
+pnpm install
 
 # 创建或更新pm2.json
 if [ ! -f pm2.json ]; then
