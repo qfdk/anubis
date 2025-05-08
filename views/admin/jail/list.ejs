@@ -13,7 +13,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            目前禁止【<%- actions.currentlyBanned; %>】次 / 总共禁止【<%- actions.totalBanned; %>】次
+            目前禁止【<%= actions.currentlyBanned || 0; %>】次 / 总共禁止【<%= actions.totalBanned || 0; %>】次
         </div>
         <table class="table">
             <thead>

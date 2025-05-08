@@ -5,10 +5,53 @@
 掌管自动禁止 IP 工作，本管理界面可以对默认 SSH 禁止IP 进行管理， 需要 fail2ban 安装
 
 ### 使用教程
+
+#### 开发模式
+- 修改 `.env.example` 到 `.env`
+- 设置 `IS_MOCK=true` 使用模拟数据，无需真实fail2ban
+- 运行 `pnpm dev` 启动开发服务器，默认端口为 `1233`
+
+#### 生产模式
 - 推荐使用 Ubuntu 20.04+, 理论上centOS 配置好也可以使用
 - 安装fail2ban
-- 修改 `.env.example` 到 `.env`, 默认配置即可, 默认端口为 `1233`
-- 可以使用打包命令或者,直接用PM2启动项目, `pm2 start pm2.json` 当然里面的配置也需要对应的修改,如果不修改 ubuntu 默认可以使用
+- 修改 `.env.example` 到 `.env`
+- 设置 `IS_MOCK=false` 使用真实fail2ban数据
+- 可以使用打包命令或者直接用PM2启动项目: `pm2 start pm2.json`
+
+### 开发指南
+
+```bash
+# 安装依赖
+pnpm install
+
+# 开发模式
+pnpm dev
+
+# 打包
+pnpm build
+
+# 生产环境运行
+pnpm start
+```
+
+### API访问
+
+Anubis现在提供了REST API接口，可通过JWT认证访问：
+
+```bash
+# 获取API Token
+curl -X POST http://localhost:1233/api/auth \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin"}'
+
+# 使用Token获取系统状态
+curl http://localhost:1233/api/status \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+
+# 获取Fail2Ban统计信息
+curl http://localhost:1233/api/fail2ban/stats \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
 
 ### 可以使用反向代理
 - 推荐使用nginx设置反向代理, 1233 端口是在救命的时候使用

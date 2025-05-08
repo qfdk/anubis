@@ -10,7 +10,7 @@
   "env": {
     "NODE_ENV": "production",
     "LOG_LEVEL": "info",
-    "PORT": 1233,
+    "PORT": 1244,
     "TZ": "Europe/Paris",
     "USERNAME": "admin",
     "PASSWORD": "admin",

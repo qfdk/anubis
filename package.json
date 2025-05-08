@@ -15,10 +15,15 @@
   },
   "scripts": {
     "build": "pkg . --out-path=dist",
-    "start": "nodemon ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "update": "wget https://github.com/out0fmemory/qqwry.dat/raw/master/qqwry_lastest.dat -O ./data/qqwry_lastest.dat"
   },
+  "engines": {
+    "node": ">=18.12.0"
+  },
   "dependencies": {
+    "compression": "^1.7.4",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
     "ejs": "~2.6.1",
@@ -27,6 +32,7 @@
     "fail2ban": "git+https://github.com/drudrum/fail2ban.git",
     "geoip-lite": "^1.4.7",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^9.0.2",
     "log4js": "^6.9.1",
     "serve-favicon": "^2.5.0"
   },
