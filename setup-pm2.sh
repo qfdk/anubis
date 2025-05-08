@@ -43,7 +43,7 @@ fi
 
 # 安装依赖
 echo -e "${YELLOW}正在安装依赖...${NC}"
-npm ci
+npm install
 
 # 创建或更新pm2.json
 if [ ! -f pm2.json ]; then
