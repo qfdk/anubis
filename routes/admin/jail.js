@@ -176,6 +176,28 @@ router.get('/info/:jailname', async (req, res, next) => {
         // 输出 actions 调试信息
         logger.debug(`Actions: ${JSON.stringify(actions)}`);
         
+        // 处理真实fail2ban数据的特定情况
+        // 查看真实fail2ban返回的actions结构
+        logger.debug(`Actions from fail2ban: ${JSON.stringify(status.actions || {})}`);
+        
+        // 尝试今fail2ban的状态中提取当前和总数据
+        if (!USE_MOCK && status.actions && typeof status.actions === 'object') {
+            // 查找真实fail2ban的特性结构
+            if (status.actions.currentlyBanned !== undefined) {
+                actions.currentlyBanned = status.actions.currentlyBanned;
+            }
+            if (status.actions.totalBanned !== undefined) {
+                actions.totalBanned = status.actions.totalBanned;
+            }
+            // 有些版本可能服务不同
+            if (status.currently !== undefined) {
+                actions.currentlyBanned = status.currently;
+            }
+            if (status.total !== undefined) {
+                actions.totalBanned = status.total;
+            }
+        }
+        
         if (USE_MOCK) {
             // 已包含国家信息
             res.render('admin/jail/list', {
@@ -185,16 +207,19 @@ router.get('/info/:jailname', async (req, res, next) => {
             });
         } else {
             // 需要使用geoip查找国家
-            status.info = ips.map(ip => {
-                const geo = geoip.lookup(ip);
-                const country = geo?.country || 'JP';
-                return {ip, country};
-            });
+            const infoItems = [];
+            if (Array.isArray(ips) && ips.length > 0) {
+                for (const ip of ips) {
+                    const geo = geoip.lookup(ip);
+                    const country = geo?.country || 'JP';
+                    infoItems.push({ip, country});
+                }
+            }
             
             res.render('admin/jail/list', {
                 jailname: req.params.jailname, 
                 actions: actions,
-                info: status.info || []
+                info: infoItems
             });
         }
     } catch (err) {
