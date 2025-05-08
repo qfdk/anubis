@@ -46,21 +46,20 @@ pnpm start
 
 ### API访问
 
-Anubis现在提供了REST API接口，可通过JWT认证访问：
+Anubis提供了REST API接口，可通过基本认证访问：
 
 ```bash
-# 获取API Token
-curl -X POST http://localhost:1233/api/auth \
-  -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin"}'
-
-# 使用Token获取系统状态
+# 使用基本认证获取系统状态
 curl http://localhost:1233/api/status \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+  -u "admin:admin"
 
 # 获取Fail2Ban统计信息
 curl http://localhost:1233/api/fail2ban/stats \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+  -u "admin:admin"
+
+# 获取所有禁止的IP
+curl http://localhost:1233/api/fail2ban/banned \
+  -u "admin:admin"
 ```
 
 ### 可以使用反向代理

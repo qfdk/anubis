@@ -9,7 +9,8 @@ const favicon = require('serve-favicon');
 const {auth} = require('./middlewares/auth');
 const publicRouter = require('./routes/public');
 const adminRouter = require('./routes/admin');
-const apiRouter = require('./routes/api');
+// 使用简化版API路由，不需要JWT
+const apiRouter = require('./routes/api-simplified');
 const app = express();
 
 // view engine setup
