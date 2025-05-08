@@ -30,26 +30,37 @@ router.post('/auth/login', (req, res) => {
         const {username, password} = req.body;
         
         // 设置环境变量没有变成常量避免意外修改
-        const realPassword = process.env.PASSWORD;
-        const realUsername = process.env.USERNAME;
+        const realPassword = process.env.PASSWORD || 'admin';
+        const realUsername = process.env.USERNAME || 'admin';
+        
+        // 详细记录登录尝试信息（不包含密码）
+        logger.debug(`登录尝试 - 用户名: ${username}, 预期用户名: ${realUsername}`);
         
         // 验证登录凭证
         if (username === realUsername && password === realPassword) {
+            // 设置session
             req.session.login = true;
-            
-            // 添加登录时间戳便于追踪
             req.session.loginTime = Date.now();
             req.session.username = username;
             
-            logger.info(`用户 ${username} 登录成功`);
-            res.redirect(`${process.env.BASE_PATH}/admin`);
+            // 确保session已保存，然后再重定向
+            req.session.save((err) => {
+                if (err) {
+                    logger.error(`保存session失败: ${err.message}`);
+                    return res.redirect(process.env.BASE_PATH || '/');
+                }
+                
+                logger.info(`用户 ${username} 登录成功`);
+                // 使用return确保重定向只执行一次
+                return res.redirect(`${process.env.BASE_PATH || ''}/admin`);
+            });
         } else {
             logger.warn(`登录失败: 用户名或密码错误, 尝试的用户名: ${username}`);
-            res.redirect(process.env.BASE_PATH || '/');
+            return res.redirect(process.env.BASE_PATH || '/');
         }
     } catch (err) {
         logger.error(`登录过程发生错误: ${err.message}`);
-        res.redirect(process.env.BASE_PATH || '/');
+        return res.redirect(process.env.BASE_PATH || '/');
     }
 });
 

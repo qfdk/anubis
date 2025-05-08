@@ -23,14 +23,15 @@ app.use(express.urlencoded({extended: false}));
 // 已移除Helmet以避免CSP限制
 // 已移除compression以避免依赖问题
 
+// 更新session配置，确保正确工作
 app.use(session({
     secret: process.env.SESSION_SECRET || 'anubis',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 14,  // 设置 cookie 的过期时间为14 天
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
+        secure: false // 无论是什么环境都不使用secure cookie，避免https问题
     }
 }));
 
