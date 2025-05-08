@@ -21,10 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 // 已移除Helmet以避免CSP限制
-
-// compression 压缩响应提高性能
-const compression = require('compression');
-app.use(compression());
+// 已移除compression以避免依赖问题
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'anubis',
