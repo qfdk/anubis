@@ -14,9 +14,19 @@
 #### 生产模式
 - 推荐使用 Ubuntu 20.04+, 理论上centOS 配置好也可以使用
 - 安装fail2ban
-- 修改 `.env.example` 到 `.env`
-- 设置 `IS_MOCK=false` 使用真实fail2ban数据
-- 可以使用打包命令或者直接用PM2启动项目: `pm2 start pm2.json`
+- 使用自动化脚本快速设置:
+  ```bash
+  # 下载项目
+  git clone https://github.com/qfdk/anubis.git
+  cd anubis
+  
+  # 使用PM2设置脚本（推荐）
+  ./setup-pm2.sh
+  ```
+- 或手动设置:
+  - 修改 `.env.example` 到 `.env`
+  - 设置 `IS_MOCK=false` 使用真实fail2ban数据
+  - 可以使用打包命令或者直接用PM2启动项目: `pm2 start pm2.json`
 
 ### 开发指南
 
