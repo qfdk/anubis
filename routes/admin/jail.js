@@ -151,8 +151,20 @@ filter = ${filter}
 
 router.get('/info/:jailname', async (req, res, next) => {
     try {
+        // 初始化Jail实例
         const jailInstance = new Jail(req.params.jailname, process.env.FAIL2BAN_SOCKET_PATH);
-        const status = await jailInstance.status || {info: []};
+        let status;
+        
+        try {
+            status = await jailInstance.status || {info: []};
+        } catch (statusErr) {
+            logger.error(`获取jail状态失败: ${statusErr.message}`);
+            status = {info: [], actions: { bannedIPList: [] } };
+        }
+        
+        // 输出调试信息
+        logger.debug(`Jail status for ${req.params.jailname}: ${JSON.stringify(status)}`);
+        
         const ips = status.actions?.bannedIPList || [];
         
         // 添加默认值防止空值
@@ -161,11 +173,14 @@ router.get('/info/:jailname', async (req, res, next) => {
             totalBanned: status.totalBanned || 0
         };
         
+        // 输出 actions 调试信息
+        logger.debug(`Actions: ${JSON.stringify(actions)}`);
+        
         if (USE_MOCK) {
             // 已包含国家信息
             res.render('admin/jail/list', {
                 jailname: req.params.jailname, 
-                actions,
+                actions: actions,
                 info: status.info || []
             });
         } else {
@@ -178,7 +193,7 @@ router.get('/info/:jailname', async (req, res, next) => {
             
             res.render('admin/jail/list', {
                 jailname: req.params.jailname, 
-                actions,
+                actions: actions,
                 info: status.info || []
             });
         }

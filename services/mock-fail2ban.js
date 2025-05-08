@@ -8,30 +8,39 @@ const path = require('path');
 const { logger } = require('../utils/logger');
 
 // 模拟数据
+// 创建随机IP数组
+const createRandomIPs = (count) => {
+  const ips = [];
+  for (let i = 0; i < count; i++) {
+    if (i % 3 === 0) {
+      ips.push(`192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`);
+    } else if (i % 3 === 1) {
+      ips.push(`172.16.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`);
+    } else {
+      ips.push(`10.0.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`);
+    }
+  }
+  return ips;
+};
+
+// 默认模拟数据
 const mockData = {
   jails: [
     {
       name: 'sshd',
       enabled: true,
-      bannedIPs: [
-        '192.168.1.100',
-        '10.0.0.5',
-        '172.16.10.50'
-      ],
+      bannedIPs: createRandomIPs(5),
       stats: {
-        currentlyBanned: 3,
+        currentlyBanned: 5,
         totalBanned: 15
       }
     },
     {
       name: 'nginx-http-auth',
       enabled: true,
-      bannedIPs: [
-        '192.168.1.101',
-        '10.0.0.6'
-      ],
+      bannedIPs: createRandomIPs(3),
       stats: {
-        currentlyBanned: 2,
+        currentlyBanned: 3,
         totalBanned: 8
       }
     }
@@ -77,17 +86,29 @@ class MockFail2BanService {
             const regex = new RegExp(`\\[${jailName}\\]`, 'i');
             
             if (regex.test(content)) {
+              const numBannedIPs = Math.floor(Math.random() * 5) + 3; // 3-7 IPs
+              const bannedIPs = [];
+              
+              // 生成一些随机IP
+              for (let i = 0; i < numBannedIPs; i++) {
+                if (i % 2 === 0) {
+                  bannedIPs.push(`192.168.1.${Math.floor(Math.random() * 255)}`);
+                } else if (i % 3 === 0) {
+                  bannedIPs.push(`172.16.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`);
+                } else {
+                  bannedIPs.push(`10.0.0.${Math.floor(Math.random() * 255)}`);
+                }
+              }
+              
+              const totalBanned = Math.floor(Math.random() * 20) + numBannedIPs;
+              
               this.data.jails.push({
                 name: jailName,
                 enabled: content.includes('enabled = true'),
-                bannedIPs: [
-                  // 添加一些示例IP
-                  `192.168.1.${Math.floor(Math.random() * 255)}`,
-                  `10.0.0.${Math.floor(Math.random() * 255)}`
-                ],
+                bannedIPs: bannedIPs,
                 stats: {
-                  currentlyBanned: 2,
-                  totalBanned: Math.floor(Math.random() * 20) + 5
+                  currentlyBanned: bannedIPs.length,
+                  totalBanned: totalBanned
                 }
               });
               logger.info(`从配置文件加载jail: ${jailName} (enabled=${content.includes('enabled = true')})`);
