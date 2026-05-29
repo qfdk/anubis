@@ -7,36 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { logger } = require('../utils/logger');
 const statusService = require('../services/status');
-
-// 判断是否使用模拟服务
-const USE_MOCK = process.env.IS_MOCK === 'true';
-
-// 根据环境选择不同的服务
-let Fail2Ban, Jail;
-
-if (USE_MOCK) {
-  logger.info('API路由使用模拟的Fail2Ban服务');
-  const mockService = require('../services/mock-fail2ban');
-
-  // 创建与真实服务兼容的类
-  Fail2Ban = function(socketPath) {
-    this.status = mockService.getStatus();
-  };
-
-  Jail = function(jailName, socketPath) {
-    this.jailName = jailName;
-    this.status = mockService.getJailStatus(jailName);
-    this.ban = (ip) => mockService.banIP(jailName, ip);
-    this.unban = (ip) => mockService.unbanIP(jailName, ip);
-  };
-} else {
-  // 使用真实的fail2ban
-  const fail2ban = require('fail2ban');
-  Fail2Ban = fail2ban.Fail2Ban;
-  Jail = fail2ban.Jail;
-}
-
-const f2bSocket = process.env.FAIL2BAN_SOCKET_PATH || '/var/run/fail2ban/fail2ban.sock';
+const fail2banService = require('../services/fail2ban');
 
 /**
  * 简单的认证中间件 - 使用基础的用户名密码认证
@@ -103,23 +74,13 @@ router.get('/fail2ban/stats', basicAuth, async (req, res) => {
  */
 router.get('/fail2ban/banned', basicAuth, async (req, res) => {
   try {
-    const fail = new Fail2Ban(f2bSocket);
-    const { jails, list } = await fail.status;
-
+    const { list } = await fail2banService.getStatus();
     const result = [];
 
-    // 对每个jail获取封禁IP列表
     for (const jailName of list) {
-      const jail = new Jail(jailName, f2bSocket);
-      const status = await jail.status || { actions: { bannedIPList: [] } };
-      const ips = status.actions?.bannedIPList || [];
-
-      if (ips.length > 0) {
-        result.push({
-          jail: jailName,
-          bannedIPs: ips
-        });
-      }
+      const { info } = await fail2banService.getJailStatus(jailName);
+      const ips = info.map(i => i.ip);
+      if (ips.length > 0) result.push({ jail: jailName, bannedIPs: ips });
     }
 
     res.json({ jails: result });
@@ -142,9 +103,7 @@ router.post('/fail2ban/:jailName/ban', basicAuth, async (req, res) => {
       return res.status(400).json({ error: '缺少IP参数' });
     }
 
-    const jail = new Jail(jailName, f2bSocket);
-    await jail.ban(ip);
-
+    await fail2banService.ban(jailName, ip);
     logger.info(`通过API对IP ${ip} 在 ${jailName} 中进行了封禁`);
     res.json({ message: `IP ${ip} 已在 ${jailName} 中封禁`, success: true });
   } catch (err) {
@@ -166,9 +125,7 @@ router.post('/fail2ban/:jailName/unban', basicAuth, async (req, res) => {
       return res.status(400).json({ error: '缺少IP参数' });
     }
 
-    const jail = new Jail(jailName, f2bSocket);
-    await jail.unban(ip);
-
+    await fail2banService.unban(jailName, ip);
     logger.info(`通过API对IP ${ip} 在 ${jailName} 中进行了解封`);
     res.json({ message: `IP ${ip} 已在 ${jailName} 中解封`, success: true });
   } catch (err) {
