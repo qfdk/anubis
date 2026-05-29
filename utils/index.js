@@ -17,17 +17,6 @@ const reloadFail2ban = async () => {
     }
 };
 
-// 为了向后兼容，保留回调风格的函数
-const reloadFail2banCallback = (callback) => {
-    exec('fail2ban-client reload', (err) => {
-        if (!err) {
-            logger.info(`fail2ban 重载成功`);
-        }
-        callback(err);
-    });
-};
-
 module.exports = {
-    reloadFail2ban,
-    reloadFail2banCallback
+    reloadFail2ban
 };

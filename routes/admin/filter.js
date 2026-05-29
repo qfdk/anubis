@@ -46,6 +46,24 @@ router.post('/doAdd', async (req, res) => {
     }
 });
 
+router.post('/doEdit/:filterName', async (req, res) => {
+    try {
+        const {filterName} = req.params;
+        const {filterContent} = req.body;
+        await writeFileAsync(`${FILTER_PATH}/${filterName}.conf`, filterContent);
+
+        const err = await reloadFail2ban();
+        if (err) {
+            return res.send(err);
+        }
+
+        res.redirect(`${process.env.BASE_PATH}/admin/filters`);
+    } catch (err) {
+        logger.error(`更新过滤器失败: ${err.message}`);
+        res.json(err);
+    }
+});
+
 router.get('/edit/:filterName', async (req, res) => {
     try {
         const {filterName} = req.params;
@@ -60,7 +78,7 @@ router.get('/edit/:filterName', async (req, res) => {
     }
 });
 
-router.get('/delete/:filterName', async (req, res) => {
+router.post('/delete/:filterName', async (req, res) => {
     try {
         const {filterName} = req.params;
         await unlinkAsync(`${FILTER_PATH}/${filterName}.conf`);

@@ -41,9 +41,10 @@
                     <a class="btn btn-xs btn-primary"
                        href="<%- process.env.BASE_PATH; %>/admin/jails/edit/<%- results[i].jailname; %>"><i
                                 class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
-                    <a class="btn btn-xs btn-danger"
-                       href="<%- process.env.BASE_PATH; %>/admin/jails/delete/<%- results[i].jailname; %>"><i
-                                class="fa fa-trash" aria-hidden="true"></i> 删除</a>
+                    <form action="<%- process.env.BASE_PATH; %>/admin/jails/delete/<%- results[i].jailname; %>" method="POST" style="display:inline">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> 删除</button>
+                    </form>
                 </td>
             </tr>
         <% } %>

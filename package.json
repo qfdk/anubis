@@ -35,8 +35,7 @@
     "serve-favicon": "^2.5.0"
   },
   "optionalDependencies": {
-    "compression": "^1.7.4",
-    "jsonwebtoken": "^9.0.2"
+    "compression": "^1.7.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.16",

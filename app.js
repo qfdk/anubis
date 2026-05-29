@@ -7,9 +7,9 @@ const session = require('express-session');
 const favicon = require('serve-favicon');
 
 const {auth} = require('./middlewares/auth');
+const {csrf} = require('./middlewares/csrf');
 const publicRouter = require('./routes/public');
 const adminRouter = require('./routes/admin');
-// 使用简化版API路由，不需要JWT
 const apiRouter = require('./routes/api-simplified');
 const app = express();
 
@@ -31,7 +31,7 @@ app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 14,  // 设置 cookie 的过期时间为14 天
         httpOnly: true,
-        secure: false // 无论是什么环境都不使用secure cookie，避免https问题
+        secure: process.env.NODE_ENV === 'production'
     }
 }));
 
@@ -42,8 +42,8 @@ const usePath = (path, ...handlers) => app.use(basePath + path, ...handlers);
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 usePath('/', express.static(path.join(__dirname, 'public')));
 // Use routers
-usePath('/', publicRouter);
-usePath('/admin', auth, adminRouter);
+usePath('/', csrf, publicRouter);
+usePath('/admin', csrf, auth, adminRouter);
 usePath('/api', apiRouter);
 
 // catch 404 and forward to error handler

@@ -8,6 +8,7 @@
         <h4 class="text-center">规则设置：</h4>
         <form id="form" action="<%- process.env.BASE_PATH; %>/admin/filters/doAdd" method="POST"
               class="form-horizontal">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-group">
                 <label class="col-md-4 control-label">过滤器名称：</label>
                 <div class="col-md-4">

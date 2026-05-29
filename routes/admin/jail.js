@@ -237,13 +237,13 @@ router.get('/info/:jailname', async (req, res, next) => {
 });
 
 
-router.get('/unban/:jailname', async (req, res, next) => {
+router.post('/unban/:jailname', async (req, res, next) => {
     try {
         const jail = new Jail(req.params.jailname, process.env.FAIL2BAN_SOCKET_PATH);
-        const {ip} = req.query;
-        
+        const {ip} = req.body;
+
         await jail.unban(ip);
-        
+
         logger.info(`在jail ${req.params.jailname} 中解封IP: ${ip}`);
         res.redirect(`${process.env.BASE_PATH}/admin/jails/info/${req.params.jailname}`);
     } catch (err) {
@@ -308,7 +308,7 @@ router.post('/doEdit/:jailname', async (req, res, next) => {
     }
 });
 
-router.get('/delete/:jailname', async (req, res, next) => {
+router.post('/delete/:jailname', async (req, res, next) => {
     try {
         const files = await readdir(JAIL_PATH);
         let fileFound = false;

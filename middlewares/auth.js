@@ -16,11 +16,6 @@ const auth = (req, res, next) => {
         }
         return next();
     } 
-    // 支持开发环境下自动通过验证
-    else if (process.env.IS_ADMIN === 'true') {
-        logger.debug(`管理员模式激活，自动通过验证: ${req.originalUrl}`);
-        return next();
-    }
     else {
         logger.warn(`未授权访问尝试: ${req.originalUrl}, sessionID=${req.sessionID}`);
         // 重定向到登录页面
