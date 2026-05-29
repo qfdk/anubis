@@ -23,9 +23,9 @@ importers:
       express-session:
         specifier: ^1.17.2
         version: 1.18.1
-      fail2ban:
-        specifier: git+https://github.com/drudrum/fail2ban.git
-        version: https://codeload.github.com/drudrum/fail2ban/tar.gz/e58d851bd076cd7db94f10a6c8b42f598d505af8
+      fail2ban-node:
+        specifier: github:qfdk/fail2ban-node
+        version: https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b
       geoip-lite:
         specifier: ^1.4.7
         version: 1.4.10
@@ -332,9 +332,10 @@ packages:
     resolution: {integrity: sha512-j12Uuyb4FMrd/qQAm6uCHAkPtO8FDTRJZBDd5D2KOL2eLaz1yUNdUB/NOIyq0iU4q4cFarsUCrnFDPBcnksuOg==}
     engines: {node: '>= 0.10.0'}
 
-  fail2ban@https://codeload.github.com/drudrum/fail2ban/tar.gz/e58d851bd076cd7db94f10a6c8b42f598d505af8:
-    resolution: {tarball: https://codeload.github.com/drudrum/fail2ban/tar.gz/e58d851bd076cd7db94f10a6c8b42f598d505af8}
-    version: 1.0.2
+  fail2ban-node@https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b:
+    resolution: {tarball: https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b}
+    version: 1.0.0
+    engines: {node: '>=18.0.0'}
 
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
@@ -906,10 +907,6 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
-  unpickle@https://codeload.github.com/drudrum/node-unpickle/tar.gz/382f8fb4243309e8d346120d60c9377a22c99c73:
-    resolution: {tarball: https://codeload.github.com/drudrum/node-unpickle/tar.gz/382f8fb4243309e8d346120d60c9377a22c99c73}
-    version: 0.3.0
-
   unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
@@ -949,11 +946,6 @@ packages:
   yargs@16.2.0:
     resolution: {integrity: sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==}
     engines: {node: '>=10'}
-
-  yarn@1.22.22:
-    resolution: {integrity: sha512-prL3kGtyG7o9Z9Sv8IPfBNrWTDmXB4Qbes8A9rEzt6wkJV8mUvoirjU0Mp3GGAU06Y0XQyA3/2/RQFVuK7MTfg==}
-    engines: {node: '>=4.0.0'}
-    hasBin: true
 
   yauzl@2.10.0:
     resolution: {integrity: sha512-p4a9I6X6nu6IhoGmBqAcbJy1mlC4j27vEPZX9F4L4/vZT3Lyq1VkFHw/V/PUcB9Buo+DG3iHkT0x3Qya58zc3g==}
@@ -1258,9 +1250,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  fail2ban@https://codeload.github.com/drudrum/fail2ban/tar.gz/e58d851bd076cd7db94f10a6c8b42f598d505af8:
-    dependencies:
-      unpickle: https://codeload.github.com/drudrum/node-unpickle/tar.gz/382f8fb4243309e8d346120d60c9377a22c99c73
+  fail2ban-node@https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b: {}
 
   fast-glob@3.3.3:
     dependencies:
@@ -1861,10 +1851,6 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unpickle@https://codeload.github.com/drudrum/node-unpickle/tar.gz/382f8fb4243309e8d346120d60c9377a22c99c73:
-    dependencies:
-      yarn: 1.22.22
-
   unpipe@1.0.0: {}
 
   util-deprecate@1.0.2: {}
@@ -1901,8 +1887,6 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
-
-  yarn@1.22.22: {}
 
   yauzl@2.10.0:
     dependencies:

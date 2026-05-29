@@ -28,7 +28,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.17.2",
-    "fail2ban": "git+https://github.com/drudrum/fail2ban.git",
+    "fail2ban-node": "github:qfdk/fail2ban-node",
     "geoip-lite": "^1.4.7",
     "http-errors": "~1.6.3",
     "log4js": "^6.9.1",
