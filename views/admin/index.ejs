@@ -32,11 +32,15 @@
                     <small class="text-muted"><%- results[i].configFile; %></small>
                 </td>
                 <td>
-                    <% if(results[i].isActive){ %>
-                        <span class="label label-success">是</span>
-                    <% }else{ %>
-                        <span class="label label-danger">否</span>
-                    <% } %>
+                    <form action="<%- process.env.BASE_PATH; %>/admin/jails/toggle/<%- results[i].jailname; %>" method="POST" style="display:inline">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="configFile" value="<%- results[i].configFile; %>">
+                        <% if(results[i].isActive){ %>
+                            <button type="submit" class="btn btn-xs btn-success">启用中</button>
+                        <% }else{ %>
+                            <button type="submit" class="btn btn-xs btn-default">已禁用</button>
+                        <% } %>
+                    </form>
                 </td>
                 <td>
                     <a class="btn btn-xs btn-info"

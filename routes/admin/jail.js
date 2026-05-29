@@ -145,6 +145,34 @@ router.post('/doEdit/:jailname', async (req, res) => {
     }
 });
 
+router.post('/toggle/:jailname', async (req, res) => {
+    try {
+        const configFile = req.body.configFile;
+        if (!configFile) return res.send('Missing configFile parameter');
+        const filePath = `${JAIL_PATH}/${configFile}`;
+        let content = await readFile(filePath, 'utf-8');
+
+        if (/enabled\s*=\s*true/i.test(content)) {
+            content = content.replace(/enabled\s*=\s*true/i, 'enabled = false');
+        } else if (/enabled\s*=\s*false/i.test(content)) {
+            content = content.replace(/enabled\s*=\s*false/i, 'enabled = true');
+        } else {
+            // 没有 enabled 行则追加
+            content += '\nenabled = false\n';
+        }
+
+        await writeFile(filePath, content);
+        const err = await reloadFail2ban();
+        if (err) return res.json(err);
+
+        logger.info(`切换 jail ${req.params.jailname} (${configFile}) 激活状态`);
+        res.redirect(`${process.env.BASE_PATH}/admin`);
+    } catch (err) {
+        logger.error(`切换 jail 激活状态失败: ${err.message}`);
+        res.send('ERROR');
+    }
+});
+
 router.post('/delete/:jailname', async (req, res) => {
     try {
         const configFile = req.body.configFile;
