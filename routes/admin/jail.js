@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
 
         const configNames = await readdir(JAIL_PATH);
         const regex = /\[\w+\]/gm;
+        const seen = new Set();
         const jailsInDir = [];
 
         for (const config of configNames) {
@@ -27,11 +28,20 @@ router.get('/', async (req, res) => {
             regex.lastIndex = 0;
             let m;
             while ((m = regex.exec(content)) !== null) {
-                jailsInDir.push(m[0].slice(1, -1));
+                const jailname = m[0].slice(1, -1);
+                const key = `${jailname}:${config}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    jailsInDir.push({ jailname, configFile: config });
+                }
             }
         }
 
-        const results = [...new Set(jailsInDir)].map(jail => ({ jailname: jail, isActive: list.includes(jail) }));
+        const results = jailsInDir.map(({ jailname, configFile }) => ({
+            jailname,
+            configFile,
+            isActive: list.includes(jailname)
+        }));
         res.render('admin/index', { activeJails: list.join(', '), results });
     } catch (err) {
         res.json(err);
