@@ -67,16 +67,15 @@ curl http://localhost:1233/api/fail2ban/banned \
 
 ### nginx 二级目录反代
 
-*NOTE : 不推荐使用 除非你知道你在干什么*
+将 `/f2b` 替换为你实际使用的子路径，同时在 `.env` 或 `pm2.json` 中设置 `BASE_PATH=/f2b`。
 
-```bash
-
+```nginx
 location /f2b {
     proxy_set_header Host $host;
-    proxy_set_header X-Real_IP $remote_addr;
-    proxy_set_header X-Forwarded-For $remote_addr:$remote_port;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
     proxy_pass http://localhost:1233/f2b;
-    # websocket
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection $connection_upgrade;
@@ -84,18 +83,15 @@ location /f2b {
 
 location ~* ^/f2b/javascripts/(.+\.(js))$ {
     proxy_set_header Host $host;
-    proxy_set_header X-Real_IP $remote_addr;
-    proxy_set_header X-Forwarded-For $remote_addr:$remote_port;
+    proxy_set_header X-Forwarded-Proto $scheme;
     proxy_pass http://localhost:1233/f2b/javascripts/$1;
 }
 
 location ~* ^/f2b/images/flags/(.+\.(png|jpg|jpeg|gif))$ {
     proxy_set_header Host $host;
-    proxy_set_header X-Real_IP $remote_addr;
-    proxy_set_header X-Forwarded-For $remote_addr:$remote_port;
+    proxy_set_header X-Forwarded-Proto $scheme;
     proxy_pass http://localhost:1233/f2b/images/flags/$1;
 }
-
 ```
 
 ### 屏幕截图
