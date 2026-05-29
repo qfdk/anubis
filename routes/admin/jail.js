@@ -147,25 +147,28 @@ router.post('/doEdit/:jailname', async (req, res) => {
 
 router.post('/toggle/:jailname', async (req, res) => {
     try {
-        const configFile = req.body.configFile;
-        if (!configFile) return res.send('Missing configFile parameter');
-        const filePath = `${JAIL_PATH}/${configFile}`;
-        let content = await readFile(filePath, 'utf-8');
+        const { jailname } = req.params;
+        const targetEnabled = req.body.targetEnabled === 'true';
 
-        if (/enabled\s*=\s*true/i.test(content)) {
-            content = content.replace(/enabled\s*=\s*true/i, 'enabled = false');
-        } else if (/enabled\s*=\s*false/i.test(content)) {
-            content = content.replace(/enabled\s*=\s*false/i, 'enabled = true');
-        } else {
-            // 没有 enabled 行则追加
-            content += '\nenabled = false\n';
+        // 找出所有包含该 jail 的配置文件，全部同步修改
+        const files = await readdir(JAIL_PATH);
+        for (const file of files) {
+            const filePath = `${JAIL_PATH}/${file}`;
+            let content = await readFile(filePath, 'utf-8');
+            if (!content.includes(`[${jailname}]`)) continue;
+
+            if (/enabled\s*=\s*(true|false)/i.test(content)) {
+                content = content.replace(/enabled\s*=\s*(true|false)/i, `enabled = ${targetEnabled}`);
+            } else {
+                content += `\nenabled = ${targetEnabled}\n`;
+            }
+            await writeFile(filePath, content);
         }
 
-        await writeFile(filePath, content);
         const err = await reloadFail2ban();
         if (err) return res.json(err);
 
-        logger.info(`切换 jail ${req.params.jailname} (${configFile}) 激活状态`);
+        logger.info(`jail ${jailname} 已${targetEnabled ? '启用' : '禁用'}`);
         res.redirect(`${process.env.BASE_PATH}/admin`);
     } catch (err) {
         logger.error(`切换 jail 激活状态失败: ${err.message}`);

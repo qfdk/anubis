@@ -34,7 +34,7 @@
                 <td>
                     <form action="<%- process.env.BASE_PATH; %>/admin/jails/toggle/<%- results[i].jailname; %>" method="POST" style="display:inline">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <input type="hidden" name="configFile" value="<%- results[i].configFile; %>">
+                        <input type="hidden" name="targetEnabled" value="<%= !results[i].isActive %>">
                         <% if(results[i].isActive){ %>
                             <button type="submit" class="btn btn-xs btn-success">启用中</button>
                         <% }else{ %>
