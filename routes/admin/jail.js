@@ -115,19 +115,14 @@ router.post('/ban/:jailname', async (req, res) => {
 
 router.get('/edit/:jailname', async (req, res) => {
     try {
-        const files = await readdir(JAIL_PATH);
-        for (const file of files) {
-            const content = await readFile(`${JAIL_PATH}/${file}`, 'utf-8');
-            if (content.includes(`[${req.params.jailname}]`)) {
-                return res.render('admin/jail/edit', {
-                    configFileName: file,
-                    jailname: req.params.jailname,
-                    content: content.split('\n'),
-                });
-            }
-        }
-        logger.warn(`未找到 jail ${req.params.jailname} 的配置文件`);
-        res.send('Jail not found');
+        const configFile = req.query.file;
+        if (!configFile) return res.send('Missing file parameter');
+        const content = await readFile(`${JAIL_PATH}/${configFile}`, 'utf-8');
+        res.render('admin/jail/edit', {
+            configFileName: configFile,
+            jailname: req.params.jailname,
+            content: content.split('\n'),
+        });
     } catch (err) {
         logger.error(`编辑 jail 失败: ${err.message}`);
         res.send('ERROR');
@@ -152,20 +147,14 @@ router.post('/doEdit/:jailname', async (req, res) => {
 
 router.post('/delete/:jailname', async (req, res) => {
     try {
-        const files = await readdir(JAIL_PATH);
-        for (const file of files) {
-            const filePath = `${JAIL_PATH}/${file}`;
-            const content = await readFile(filePath, 'utf-8');
-            if (content.includes(`[${req.params.jailname}]`)) {
-                await unlink(filePath);
-                const err = await reloadFail2ban();
-                if (err) return res.json(err);
-                logger.info(`删除 jail ${req.params.jailname} 成功`);
-                return res.redirect(`${process.env.BASE_PATH}/admin`);
-            }
-        }
-        logger.warn(`要删除的 jail ${req.params.jailname} 不存在`);
-        res.send('Jail not found');
+        const configFile = req.body.configFile;
+        if (!configFile) return res.send('Missing configFile parameter');
+        const filePath = `${JAIL_PATH}/${configFile}`;
+        await unlink(filePath);
+        const err = await reloadFail2ban();
+        if (err) return res.json(err);
+        logger.info(`删除 jail ${req.params.jailname} (${configFile}) 成功`);
+        res.redirect(`${process.env.BASE_PATH}/admin`);
     } catch (err) {
         logger.error(`删除 jail 失败: ${err.message}`);
         res.send('ERROR');
