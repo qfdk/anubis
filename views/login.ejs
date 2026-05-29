@@ -7,69 +7,72 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #111;
-            color: #ccc;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #2c3e50;
+            font-family: -apple-system, "system-ui", "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 40px;
             width: 100%;
             max-width: 360px;
-            padding: 40px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
         }
         .title {
-            font-size: 20px;
-            font-weight: 500;
-            color: #eee;
-            margin-bottom: 6px;
-            letter-spacing: 0.02em;
+            font-size: 22px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 4px;
         }
         .subtitle {
             font-size: 13px;
-            color: #555;
-            margin-bottom: 36px;
+            color: #888;
+            margin-bottom: 28px;
         }
         label {
             display: block;
             font-size: 13px;
-            color: #888;
+            color: #555;
             margin-bottom: 6px;
+            font-weight: 500;
         }
         input {
             width: 100%;
-            background: #1c1c1c;
-            border: 1px solid #3a3a3a;
-            border-radius: 6px;
-            padding: 10px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 9px 12px;
             font-size: 14px;
-            color: #e0e0e0;
+            color: #212529;
             outline: none;
             transition: border-color 0.15s;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+            background: #fff;
         }
-        input:focus { border-color: #666; }
+        input:focus { border-color: #3498db; box-shadow: 0 0 0 3px rgba(52,152,219,0.12); }
         button {
             width: 100%;
-            background: #1c1c1c;
-            border: 1px solid #3a3a3a;
-            border-radius: 6px;
+            background: #3498db;
+            border: none;
+            border-radius: 5px;
             padding: 10px;
             font-size: 14px;
-            color: #ccc;
+            font-weight: 500;
+            color: #fff;
             cursor: pointer;
-            transition: background 0.15s, color 0.15s;
+            transition: background 0.15s;
             margin-top: 4px;
         }
-        button:hover { background: #2a2a2a; color: #fff; }
+        button:hover { background: #2980b9; }
     </style>
 </head>
 <body>
 <div class="card">
     <div class="title">ⲁⲛⲟⲩⲡ</div>
-    <div class="subtitle">fail2ban 管理</div>
+    <div class="subtitle">管理后台登录</div>
     <form action="<%- process.env.BASE_PATH; %>/auth/login" method="post">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <label for="username">用户名</label>
