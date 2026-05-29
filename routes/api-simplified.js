@@ -27,7 +27,7 @@ const basicAuth = (req, res, next) => {
   const password = credentials[1];
   
   // 验证用户名和密码
-  if (username === process.env.ADMIN_USERNAME && password === process.env.PASSWORD) {
+  if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
     return next();
   }
   
