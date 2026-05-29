@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
             }
         }
 
-        const results = jailsInDir.map(jail => ({ jailname: jail, isActive: list.includes(jail) }));
+        const results = [...new Set(jailsInDir)].map(jail => ({ jailname: jail, isActive: list.includes(jail) }));
         res.render('admin/index', { activeJails: list.join(', '), results });
     } catch (err) {
         res.json(err);
