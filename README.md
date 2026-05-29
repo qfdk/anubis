@@ -62,6 +62,10 @@ curl http://localhost:1233/api/fail2ban/banned \
   -u "admin:admin"
 ```
 
+### fail2ban Node.js 客户端
+
+本项目使用 [fail2ban-node](https://www.npmjs.com/package/fail2ban-node) 直接通过 Unix socket 与 fail2ban 通信，无需依赖 `fail2ban-client` CLI。
+
 ### 可以使用反向代理
 - 推荐使用nginx设置反向代理, 1233 端口是在救命的时候使用
 

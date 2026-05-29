@@ -28,7 +28,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.17.2",
-    "fail2ban-node": "github:qfdk/fail2ban-node",
+    "fail2ban-node": "^1.0.0",
     "geoip-lite": "^1.4.7",
     "http-errors": "~1.6.3",
     "log4js": "^6.9.1",

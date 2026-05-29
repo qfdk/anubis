@@ -24,8 +24,8 @@ importers:
         specifier: ^1.17.2
         version: 1.18.1
       fail2ban-node:
-        specifier: github:qfdk/fail2ban-node
-        version: https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b
+        specifier: ^1.0.0
+        version: 1.0.0
       geoip-lite:
         specifier: ^1.4.7
         version: 1.4.10
@@ -332,9 +332,8 @@ packages:
     resolution: {integrity: sha512-j12Uuyb4FMrd/qQAm6uCHAkPtO8FDTRJZBDd5D2KOL2eLaz1yUNdUB/NOIyq0iU4q4cFarsUCrnFDPBcnksuOg==}
     engines: {node: '>= 0.10.0'}
 
-  fail2ban-node@https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b:
-    resolution: {tarball: https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b}
-    version: 1.0.0
+  fail2ban-node@1.0.0:
+    resolution: {integrity: sha512-jtFoznD2eGS2ga6jhd4R2gr9qPwauItsPjha8L2kJJDzOqFHj6EfI112TpCgoQX+knuMZP+IyFtgWE89zHsF/Q==}
     engines: {node: '>=18.0.0'}
 
   fast-glob@3.3.3:
@@ -1250,7 +1249,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  fail2ban-node@https://codeload.github.com/qfdk/fail2ban-node/tar.gz/db9c2ee45d3497177e6b473399e0d38330d1bb0b: {}
+  fail2ban-node@1.0.0: {}
 
   fast-glob@3.3.3:
     dependencies:
