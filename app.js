@@ -20,18 +20,17 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-// 已移除Helmet以避免CSP限制
-// 已移除compression以避免依赖问题
+// 信任反向代理（nginx），让 req.secure 正确反映 HTTPS 状态
+app.set('trust proxy', 1);
 
-// 更新session配置，确保正确工作
 app.use(session({
     secret: process.env.SESSION_SECRET || 'anubis',
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 14,  // 设置 cookie 的过期时间为14 天
+        maxAge: 1000 * 60 * 60 * 24 * 14,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
+        secure: 'auto'  // HTTP 时不加 Secure，HTTPS 时自动加
     }
 }));
 
