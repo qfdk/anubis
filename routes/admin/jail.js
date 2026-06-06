@@ -3,7 +3,7 @@ const router = express.Router();
 const util = require('util');
 const fs = require('fs');
 const { logger } = require('../../utils/logger');
-const { reloadFail2ban } = require('../../utils');
+const { reloadFail2ban, resolveInside } = require('../../utils');
 const fail2banService = require('../../services/fail2ban');
 
 const readdir = util.promisify(fs.readdir);
@@ -62,11 +62,12 @@ router.post('/doAdd', async (req, res) => {
     try {
         const { jailname, enabled, bantime, maxretry, filter } = req.body;
         const content = `[${jailname}]\nenabled = ${enabled === 'true'}\nbantime = ${bantime}\nmaxretry = ${maxretry}\nfilter = ${filter}\n`;
-        await writeFile(`${JAIL_PATH}/${jailname}.conf`, content);
+        const filePath = resolveInside(JAIL_PATH, `${jailname}.conf`);
+        await writeFile(filePath, content);
 
         const err = await reloadFail2ban();
         if (err) {
-            await unlink(`${JAIL_PATH}/${jailname}.conf`).catch(() => {});
+            await unlink(filePath).catch(() => {});
             return res.json(err);
         }
 
@@ -117,7 +118,7 @@ router.get('/edit/:jailname', async (req, res) => {
     try {
         const configFile = req.query.file;
         if (!configFile) return res.send('Missing file parameter');
-        const content = await readFile(`${JAIL_PATH}/${configFile}`, 'utf-8');
+        const content = await readFile(resolveInside(JAIL_PATH, configFile), 'utf-8');
         res.render('admin/jail/edit', {
             configFileName: configFile,
             jailname: req.params.jailname,
@@ -132,7 +133,7 @@ router.get('/edit/:jailname', async (req, res) => {
 router.post('/doEdit/:jailname', async (req, res) => {
     try {
         const { configFileName, content } = req.body;
-        await writeFile(`${JAIL_PATH}/${configFileName}`, content);
+        await writeFile(resolveInside(JAIL_PATH, configFileName), content);
 
         const err = await reloadFail2ban();
         if (err) return res.json(err);
@@ -180,7 +181,7 @@ router.post('/delete/:jailname', async (req, res) => {
     try {
         const configFile = req.body.configFile;
         if (!configFile) return res.send('Missing configFile parameter');
-        const filePath = `${JAIL_PATH}/${configFile}`;
+        const filePath = resolveInside(JAIL_PATH, configFile);
         await unlink(filePath);
         const err = await reloadFail2ban();
         if (err) return res.json(err);

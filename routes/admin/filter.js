@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const util = require('util');
-const {reloadFail2ban} = require('../../utils');
+const {reloadFail2ban, resolveInside} = require('../../utils');
 const {logger} = require('../../utils/logger');
 
 const FILTER_PATH = process.env.FAIL2BAN_FILTER_PATH || `/etc/fail2ban/filter.d`;
@@ -32,7 +32,7 @@ router.get('/add', (req, res) => {
 router.post('/doAdd', async (req, res) => {
     try {
         const {filterName, filterContent} = req.body;
-        await writeFileAsync(`${FILTER_PATH}/${filterName}.conf`, filterContent);
+        await writeFileAsync(resolveInside(FILTER_PATH, `${filterName}.conf`), filterContent);
         
         const err = await reloadFail2ban();
         if (err) {
@@ -50,7 +50,7 @@ router.post('/doEdit/:filterName', async (req, res) => {
     try {
         const {filterName} = req.params;
         const {filterContent} = req.body;
-        await writeFileAsync(`${FILTER_PATH}/${filterName}.conf`, filterContent);
+        await writeFileAsync(resolveInside(FILTER_PATH, `${filterName}.conf`), filterContent);
 
         const err = await reloadFail2ban();
         if (err) {
@@ -67,7 +67,7 @@ router.post('/doEdit/:filterName', async (req, res) => {
 router.get('/edit/:filterName', async (req, res) => {
     try {
         const {filterName} = req.params;
-        const filterContent = await readFileAsync(`${FILTER_PATH}/${filterName}.conf`);
+        const filterContent = await readFileAsync(resolveInside(FILTER_PATH, `${filterName}.conf`));
         res.render(`admin/filter/edit`, {
             filterName, 
             filterContent: filterContent.toString('utf8').split('\n')
@@ -81,7 +81,7 @@ router.get('/edit/:filterName', async (req, res) => {
 router.post('/delete/:filterName', async (req, res) => {
     try {
         const {filterName} = req.params;
-        await unlinkAsync(`${FILTER_PATH}/${filterName}.conf`);
+        await unlinkAsync(resolveInside(FILTER_PATH, `${filterName}.conf`));
         
         const err = await reloadFail2ban();
         if (err) {

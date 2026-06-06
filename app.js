@@ -1,10 +1,23 @@
 require('dotenv').config();
 
+const crypto = require('crypto');
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const favicon = require('serve-favicon');
+const { logger } = require('./utils/logger');
+
+// 安全配置校验：杜绝可预测的 session secret 与默认弱口令
+const WEAK_SECRETS = ['anubis', 'change-this-to-a-random-string', 'anubis-dev-session-secret'];
+let sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret || WEAK_SECRETS.includes(sessionSecret)) {
+    logger.warn('[安全] SESSION_SECRET 未设置或为弱默认值，已临时生成随机值（重启后会话失效）；生产环境请在 .env 设置强随机 SESSION_SECRET');
+    sessionSecret = crypto.randomBytes(32).toString('hex');
+}
+if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD === 'admin') {
+    logger.warn('[安全] ADMIN_PASSWORD 未设置或仍为默认值 admin，存在被爆破风险，请在 .env 设置强密码');
+}
 
 const {auth} = require('./middlewares/auth');
 const {csrf} = require('./middlewares/csrf');
@@ -24,7 +37,7 @@ app.use(express.urlencoded({extended: false}));
 app.set('trust proxy', 1);
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'anubis',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
