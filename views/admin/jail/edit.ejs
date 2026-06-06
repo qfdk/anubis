@@ -38,7 +38,7 @@
     });
     var editor;
     require(['vs/editor/editor.main'], function () {
-        var contentArray = <%- JSON.stringify(content) %>; // 从服务器获取的原始数据数组
+        var contentArray = <%- JSON.stringify(content).replace(/</g, '\\u003c') %>; // 从服务器获取的原始数据数组
         var content = contentArray.join('\n'); // 将数组连接成一个字符串，每一行用换行符分隔
         editor = monaco.editor.create(document.getElementById('container'), {
             value: content,

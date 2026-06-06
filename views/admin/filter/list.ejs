@@ -24,13 +24,13 @@
                     <%- i + 1; %>
                 </th>
                 <td>
-                    <%- filters[i]; %>
+                    <%= filters[i]; %>
                 </td>
                 <td>
                     <a class="btn btn-xs btn-primary"
-                       href="<%- process.env.BASE_PATH; %>/admin/filters/edit/<%- filters[i]; %>"><i
+                       href="<%- process.env.BASE_PATH; %>/admin/filters/edit/<%= filters[i]; %>"><i
                                 class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
-                    <form action="<%- process.env.BASE_PATH; %>/admin/filters/delete/<%- filters[i]; %>" method="POST" style="display:inline">
+                    <form action="<%- process.env.BASE_PATH; %>/admin/filters/delete/<%= filters[i]; %>" method="POST" style="display:inline">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> 删除</button>
                     </form>

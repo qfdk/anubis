@@ -32,15 +32,15 @@
                             <%- i+1; %>
                         </th>
                         <td>
-                            <%- info[i].ip; %>
+                            <%= info[i].ip; %>
                         </td>
                         <td>
-                         <img style="width: 30px;" src="<%- process.env.BASE_PATH; %>/images/flags/<%- info[i].country; %>.png" alt="<%- info[i].country; %>">
+                         <img style="width: 30px;" src="<%- process.env.BASE_PATH; %>/images/flags/<%= info[i].country; %>.png" alt="<%= info[i].country; %>">
                         </td>
                         <td>
                             <form action="<%- process.env.BASE_PATH; %>/admin/jails/unban/<%=jailname;%>" method="POST" style="display:inline">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <input type="hidden" name="ip" value="<%- info[i].ip; %>">
+                                <input type="hidden" name="ip" value="<%= info[i].ip; %>">
                                 <button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> 删除</button>
                             </form>
                         </td>

@@ -7,7 +7,7 @@
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">
-        激活规则【<%- activeJails; %>】/ 规则列表【<%= results.length; %>】
+        激活规则【<%= activeJails; %>】/ 规则列表【<%= results.length; %>】
     </div>
     <table class="table">
         <thead>
@@ -26,13 +26,13 @@
                     <%- i + 1; %>
                 </th>
                 <td>
-                    <%- results[i].jailname; %>
+                    <%= results[i].jailname; %>
                 </td>
                 <td>
-                    <small class="text-muted"><%- results[i].configFile; %></small>
+                    <small class="text-muted"><%= results[i].configFile; %></small>
                 </td>
                 <td>
-                    <form action="<%- process.env.BASE_PATH; %>/admin/jails/toggle/<%- results[i].jailname; %>" method="POST" style="display:inline">
+                    <form action="<%- process.env.BASE_PATH; %>/admin/jails/toggle/<%= results[i].jailname; %>" method="POST" style="display:inline">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <input type="hidden" name="targetEnabled" value="<%= !results[i].isActive %>">
                         <% if(results[i].isActive){ %>
@@ -44,14 +44,14 @@
                 </td>
                 <td>
                     <a class="btn btn-xs btn-info"
-                       href="<%- process.env.BASE_PATH; %>/admin/jails/info/<%- results[i].jailname; %>"><i
+                       href="<%- process.env.BASE_PATH; %>/admin/jails/info/<%= results[i].jailname; %>"><i
                                 class="fa fa-search" aria-hidden="true"></i> 探视</a>
                     <a class="btn btn-xs btn-primary"
-                       href="<%- process.env.BASE_PATH; %>/admin/jails/edit/<%- results[i].jailname; %>?file=<%- results[i].configFile; %>"><i
+                       href="<%- process.env.BASE_PATH; %>/admin/jails/edit/<%= results[i].jailname; %>?file=<%= results[i].configFile; %>"><i
                                 class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
-                    <form action="<%- process.env.BASE_PATH; %>/admin/jails/delete/<%- results[i].jailname; %>" method="POST" style="display:inline">
+                    <form action="<%- process.env.BASE_PATH; %>/admin/jails/delete/<%= results[i].jailname; %>" method="POST" style="display:inline">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <input type="hidden" name="configFile" value="<%- results[i].configFile; %>">
+                        <input type="hidden" name="configFile" value="<%= results[i].configFile; %>">
                         <button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> 删除</button>
                     </form>
                 </td>

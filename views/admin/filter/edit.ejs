@@ -1,18 +1,18 @@
 <%- include('../../includes/header'); %>
 <div class="jumbotron">
-    <h2>编辑过滤器【<%- filterName; %>】</h2>
+    <h2>编辑过滤器【<%= filterName; %>】</h2>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">规则设置</div>
     <div class="panel-body">
         <h4 class="text-center">规则设置：</h4>
-        <form id='form' action="<%- process.env.BASE_PATH; %>/admin/filters/doEdit/<%- filterName; %>" method="POST"
+        <form id='form' action="<%- process.env.BASE_PATH; %>/admin/filters/doEdit/<%= filterName; %>" method="POST"
               class="form-horizontal">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-group">
                 <label class="col-md-4 control-label">过滤器名称：</label>
                 <div class="col-md-4">
-                    <input type="text" class="form-control" name="filterName" value="<%- filterName; %>" required
+                    <input type="text" class="form-control" name="filterName" value="<%= filterName; %>" required
                            readonly>
                 </div>
             </div>
@@ -39,7 +39,7 @@
     });
     var editor;
     require(['vs/editor/editor.main'], function () {
-        var contentArray = <%- JSON.stringify(filterContent) %>; // 从服务器获取的原始数据数组
+        var contentArray = <%- JSON.stringify(filterContent).replace(/</g, '\\u003c') %>; // 从服务器获取的原始数据数组
         var content = contentArray.join('\n'); // 将数组连接成一个字符串，每一行用换行符分隔
         editor = monaco.editor.create(document.getElementById('container'), {
             value: content,
