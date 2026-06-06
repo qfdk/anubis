@@ -38,21 +38,28 @@ router.post('/auth/login', (req, res) => {
         
         // 验证登录凭证
         if (username === realUsername && password === realPassword) {
-            // 设置session
-            req.session.login = true;
-            req.session.loginTime = Date.now();
-            req.session.username = username;
-            
-            // 确保session已保存，然后再重定向
-            req.session.save((err) => {
+            // 防会话固定：登录成功后重新生成 session ID，丢弃预认证阶段的旧 ID
+            req.session.regenerate((err) => {
                 if (err) {
-                    logger.error(`保存session失败: ${err.message}`);
+                    logger.error(`重新生成session失败: ${err.message}`);
                     return res.redirect(process.env.BASE_PATH || '/');
                 }
-                
-                logger.info(`用户 ${username} 登录成功`);
-                // 使用return确保重定向只执行一次
-                return res.redirect(`${process.env.BASE_PATH || ''}/admin`);
+
+                req.session.login = true;
+                req.session.loginTime = Date.now();
+                req.session.username = username;
+
+                // 确保session已保存，然后再重定向
+                req.session.save((err) => {
+                    if (err) {
+                        logger.error(`保存session失败: ${err.message}`);
+                        return res.redirect(process.env.BASE_PATH || '/');
+                    }
+
+                    logger.info(`用户 ${username} 登录成功`);
+                    // 使用return确保重定向只执行一次
+                    return res.redirect(`${process.env.BASE_PATH || ''}/admin`);
+                });
             });
         } else {
             logger.warn(`登录失败: 用户名或密码错误, 尝试的用户名: ${username}`);
