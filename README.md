@@ -104,3 +104,9 @@ location ~* ^/f2b/images/flags/(.+\.(png|jpg|jpeg|gif))$ {
 ![2](docs/images/2.png)
 ![3](docs/images/3.png)
 ![4](docs/images/4.png)
+
+## 赞助
+
+<a href="https://voilapro.app/?ref=github-anubis"><img src="https://voilapro.app/images/icon.png" alt="Voilà Pro" width="160"/></a>
+
+本项目由 [Voilà Pro](https://voilapro.app/?ref=github-anubis) 赞助支持 —— macOS 语音输入工具。按住快捷键说话，文字直接落到光标处，中英法混说也能识别。
