@@ -7,7 +7,7 @@
 ### 使用教程
 
 #### 开发模式
-- 修改 `.env.example` 到 `.env`
+- 修改 `.env.example` 到 `.env`，并设置强密码 `ADMIN_PASSWORD`（必填，至少 8 位）
 - 设置 `IS_MOCK=true` 使用模拟数据，无需真实fail2ban
 - 运行 `pnpm dev` 启动开发服务器，默认端口为 `1233`
 
@@ -51,15 +51,15 @@ Anubis提供了REST API接口，可通过基本认证访问：
 ```bash
 # 使用基本认证获取系统状态
 curl http://localhost:1233/api/status \
-  -u "admin:admin"
+  -u "admin:你的密码"
 
 # 获取Fail2Ban统计信息
 curl http://localhost:1233/api/fail2ban/stats \
-  -u "admin:admin"
+  -u "admin:你的密码"
 
 # 获取所有禁止的IP
 curl http://localhost:1233/api/fail2ban/banned \
-  -u "admin:admin"
+  -u "admin:你的密码"
 ```
 
 ### fail2ban Node.js 客户端
