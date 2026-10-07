@@ -30,8 +30,8 @@ router.post('/auth/login', (req, res) => {
         const {username, password} = req.body;
         
         // 设置环境变量没有变成常量避免意外修改
-        const realPassword = process.env.ADMIN_PASSWORD || 'admin';
-        const realUsername = process.env.ADMIN_USERNAME || 'admin';
+        const realPassword = process.env.ADMIN_PASSWORD;
+        const realUsername = process.env.ADMIN_USERNAME;
         
         // 详细记录登录尝试信息（不包含密码）
         logger.debug(`登录尝试 - 用户名: ${username}, 预期用户名: ${realUsername}`);

@@ -15,8 +15,13 @@ if (!sessionSecret || WEAK_SECRETS.includes(sessionSecret)) {
     logger.warn('[安全] SESSION_SECRET 未设置或为弱默认值，已临时生成随机值（重启后会话失效）；生产环境请在 .env 设置强随机 SESSION_SECRET');
     sessionSecret = crypto.randomBytes(32).toString('hex');
 }
-if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD === 'admin') {
-    logger.warn('[安全] ADMIN_PASSWORD 未设置或仍为默认值 admin，存在被爆破风险，请在 .env 设置强密码');
+// 失败即拒绝：未设置或使用弱口令时直接退出，避免以 admin/admin 暴露 fail2ban 管理权限
+const WEAK_PASSWORDS = ['admin', 'password', '123456', 'changeme', 'change-this-password'];
+if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD
+    || process.env.ADMIN_PASSWORD.length < 8
+    || WEAK_PASSWORDS.includes(process.env.ADMIN_PASSWORD.toLowerCase())) {
+    logger.error('[安全] ADMIN_USERNAME / ADMIN_PASSWORD 未设置或密码过弱（至少 8 位且不能是默认值），拒绝启动');
+    process.exit(1);
 }
 
 const {auth} = require('./middlewares/auth');

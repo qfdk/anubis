@@ -1,3 +1,11 @@
+# Security Policy
+
+## Reporting a vulnerability
+
+请勿通过公开 issue 报告安全问题。请使用本仓库 **Security → Report a vulnerability**（私密漏洞报告），或发邮件至 **qfdk2010@gmail.com**，标题 `[SECURITY] anubis`。7 天内确认，高危问题 30 天内修复，修复后发布 GitHub Security Advisory 并致谢报告者。
+
+---
+
 # 安全审计报告
 
 - **项目**：Anubis（fail2ban Web 管理面板，Express + EJS）
